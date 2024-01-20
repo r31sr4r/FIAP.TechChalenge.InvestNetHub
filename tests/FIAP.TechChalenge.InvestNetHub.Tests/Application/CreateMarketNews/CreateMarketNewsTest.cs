@@ -6,30 +6,28 @@ using Moq;
 using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.CreateMarketNews;
+
+[Collection(nameof(CreateMarketNewsTestFixture))]
 public class CreateMarketNewsTest
 {
+    private readonly CreateMarketNewsTestFixture _fixture;
+
+    public CreateMarketNewsTest(CreateMarketNewsTestFixture fixture)
+        => _fixture = fixture;
+
     [Fact(DisplayName = nameof(CreateMarketNews))]
     [Trait("Application", "CreateMarketNews - Use Cases")]
     public async void CreateMarketNews()
     {
-        var repositoryMock = new Mock<IMarketNewsRepository>();
-        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
         var useCase = new UseCases.CreateMarketNews(
-            repositoryMock.Object, 
+            repositoryMock.Object,
             unitOfWorkMock.Object
         );
 
-        var input = new UseCases.CreateMarketNewsInput(
-            "Title",
-            "Summary",
-            DateTime.Now,
-            "Url",
-            "Source",
-            "ImageUrl",
-            new List<string> { "Author" },
-            0.5m,
-            "Label"
-        ); 
+        var input = _fixture.GetInput();
 
         var output = await useCase.Handle(input, CancellationToken.None);
 

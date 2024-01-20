@@ -2,6 +2,12 @@
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Entity.MarketNews;
+
+[CollectionDefinition(nameof(MarketNewsTestFixture))]
+public class MarketNewsTestFixtureCollection
+    : ICollectionFixture<MarketNewsTestFixture>
+{ }
+
 public class MarketNewsTestFixture : BaseFixture
 {
     public MarketNewsTestFixture()
@@ -62,7 +68,3 @@ public class MarketNewsTestFixture : BaseFixture
 
 }
 
-[CollectionDefinition(nameof(MarketNewsTestFixture))]
-public class MarketNewsTestFixtureCollection 
-    : ICollectionFixture<MarketNewsTestFixture>
-{ }
