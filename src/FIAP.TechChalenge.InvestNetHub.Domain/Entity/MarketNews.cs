@@ -1,8 +1,9 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
 
 namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity
 {
-    public class MarketNews
+    public class MarketNews : AggregateRoot
     {
         public MarketNews(
             string title,
@@ -14,9 +15,8 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity
             List<string> authors,
             decimal overallSentimentScore,
             string overallSentimentLabel
-        )
+        ) : base()
         {
-            Id = Guid.NewGuid();
             Title = title;
             Summary = summary;
             PublishDate = publishDate;
@@ -30,7 +30,6 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity
             Validate();
         }
 
-        public Guid Id { get; private set; }
         public string Title { get; private set; }
         public string Summary { get; private set; }
         public DateTime PublishDate { get; private set; }
@@ -62,7 +61,6 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity
                 throw new EntityValidationException("Authors list cannot be empty.");
         }
 
-
         private bool ValidatePublishDate(DateTime publishDate)
         {
             return publishDate <= DateTime.Now;
@@ -72,7 +70,6 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity
         {
             return authors != null && authors.Any();
         }
-
 
     }
 }

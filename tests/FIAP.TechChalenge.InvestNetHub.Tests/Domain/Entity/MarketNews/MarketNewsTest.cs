@@ -1,4 +1,5 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
+using FluentAssertions;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Entity.MarketNews;
@@ -33,18 +34,19 @@ public class MarketNewsTest
             validMarketNews.OverallSentimentLabel
         );
 
-        Assert.NotNull(marketNews);
-        Assert.NotEqual(default(Guid), marketNews.Id);
-        Assert.Equal(validMarketNews.Title, marketNews.Title);
-        Assert.Equal(validMarketNews.Summary, marketNews.Summary);
-        Assert.Equal(validMarketNews.PublishDate, marketNews.PublishDate);
-        Assert.Equal(validMarketNews.Url, marketNews.Url);
-        Assert.Equal(validMarketNews.Source, marketNews.Source);
-        Assert.Equal(validMarketNews.ImageUrl, marketNews.ImageUrl);
-        Assert.Equal(validMarketNews.Authors, marketNews.Authors);
-        Assert.Equal(validMarketNews.OverallSentimentScore, marketNews.OverallSentimentScore);
-        Assert.Equal(validMarketNews.OverallSentimentLabel, marketNews.OverallSentimentLabel);
-
+        marketNews.Should().NotBeNull();
+        marketNews.Should().BeOfType<DomainEntity.MarketNews>();
+        marketNews.Id.Should().NotBeEmpty();        
+        marketNews.Title.Should().Be(validMarketNews.Title);
+        marketNews.Summary.Should().Be(validMarketNews.Summary);
+        marketNews.PublishDate.Should().Be(validMarketNews.PublishDate);
+        marketNews.Url.Should().Be(validMarketNews.Url);
+        marketNews.Source.Should().Be(validMarketNews.Source);
+        marketNews.ImageUrl.Should().Be(validMarketNews.ImageUrl);
+        marketNews.Authors.Should().BeEquivalentTo(validMarketNews.Authors);
+        marketNews.OverallSentimentScore.Should().Be(validMarketNews.OverallSentimentScore);
+        marketNews.OverallSentimentLabel.Should().Be(validMarketNews.OverallSentimentLabel);
+        
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidTitle))]
@@ -65,8 +67,9 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Title cannot be empty or null.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Title cannot be empty or null.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidSummary))]
@@ -87,8 +90,9 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Summary cannot be empty or null.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Summary cannot be empty or null.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidUrl))]
@@ -109,8 +113,9 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("URL cannot be empty or null.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("URL cannot be empty or null.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidSource))]
@@ -131,8 +136,9 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Source cannot be empty or null.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Source cannot be empty or null.");        
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidPublishDate))]
@@ -153,8 +159,9 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Publish date cannot be in the future.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Publish date cannot be in the future.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidAuthors))]
@@ -173,16 +180,15 @@ public class MarketNewsTest
             0.5m,
             "Neutral");
 
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Authors list cannot be empty.", exception.Message);
+        action.Should()
+            .Throw<EntityValidationException>()
+            .WithMessage("Authors list cannot be empty.");
     }
 
     public static IEnumerable<object[]> GetInvalidAuthors()
     {
         yield return new object[] { new List<string>() };
-        yield return new object[] { null };
+        yield return new object[] { null! };
     }
-
-
 
 }
