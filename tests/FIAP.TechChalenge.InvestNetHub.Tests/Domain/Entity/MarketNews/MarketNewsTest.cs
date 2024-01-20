@@ -3,24 +3,20 @@ using FluentAssertions;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Entity.MarketNews;
+
+[Collection(nameof(MarketNewsTestFixture))]
 public class MarketNewsTest
 {
+    private readonly MarketNewsTestFixture _marketNewsTestFixturee;
+
+    public MarketNewsTest(MarketNewsTestFixture marketNewsTestFixturee) 
+        => _marketNewsTestFixturee = marketNewsTestFixturee;
+
     [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "MarketNews - Aggregates")]
     public void Instantiate()
     {
-        var validMarketNews = new
-        {
-            Title = "Test",
-            Summary = "Test Summary",
-            PublishDate = DateTime.Now.AddDays(-2),
-            Url = "http://www.teste.com.br",
-            Source = "Test Source",
-            ImageUrl = "http://www.imageurl.com",
-            Authors = new List<string> { "Author1", "Author2" },
-            OverallSentimentScore = 0.5m,
-            OverallSentimentLabel = "Neutral"
-        };
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
 
         var marketNews = new DomainEntity.MarketNews(
             validMarketNews.Title,
@@ -56,16 +52,19 @@ public class MarketNewsTest
     [InlineData(" ")]
     public void Instantiate_InvalidTitle(string? title)
     {
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
+
         Action action = () => new DomainEntity.MarketNews(
             title!,
-            "Test Summary",
-            DateTime.Now.AddDays(-2),
-            "http://www.teste.com.br",
-            "Test Source",
-            "http://www.imageurl.com",
-            new List<string> { "Author1", "Author2" },
-            0.5m,
-            "Neutral");
+            validMarketNews.Summary,
+            validMarketNews.PublishDate,
+            validMarketNews.Url,
+            validMarketNews.Source,
+            validMarketNews.ImageUrl,
+            validMarketNews.Authors,
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -79,17 +78,20 @@ public class MarketNewsTest
     [InlineData(" ")]
     public void Instantiate_InvalidSummary(string? summary)
     {
-        Action action = () => new DomainEntity.MarketNews(
-            "Test",
-            summary!,
-            DateTime.Now.AddDays(-2),
-            "http://www.teste.com.br",
-            "Test Source",
-            "http://www.imageurl.com",
-            new List<string> { "Author1", "Author2" },
-            0.5m,
-            "Neutral");
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
 
+        Action action = () => new DomainEntity.MarketNews(
+            validMarketNews.Title,
+            summary!,
+            validMarketNews.PublishDate,
+            validMarketNews.Url,
+            validMarketNews.Source,
+            validMarketNews.ImageUrl,
+            validMarketNews.Authors,
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );
+            
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage("Summary cannot be empty or null.");
@@ -102,16 +104,19 @@ public class MarketNewsTest
     [InlineData(" ")]
     public void Instantiate_InvalidUrl(string? url)
     {
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
+
         Action action = () => new DomainEntity.MarketNews(
-            "Test",
-            "Test Summary",
-            DateTime.Now.AddDays(-2),
+            validMarketNews.Title,
+            validMarketNews.Summary,
+            validMarketNews.PublishDate,
             url!,
-            "Test Source",
-            "http://www.imageurl.com",
-            new List<string> { "Author1", "Author2" },
-            0.5m,
-            "Neutral");
+            validMarketNews.Source,
+            validMarketNews.ImageUrl,
+            validMarketNews.Authors,
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );            
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -125,16 +130,19 @@ public class MarketNewsTest
     [InlineData(" ")]
     public void Instantiate_InvalidSource(string? source)
     {
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
+
         Action action = () => new DomainEntity.MarketNews(
-            "Test",
-            "Test Summary",
-            DateTime.Now.AddDays(-2),
-            "http://www.teste.com.br",
+            validMarketNews.Title,
+            validMarketNews.Summary,
+            validMarketNews.PublishDate,
+            validMarketNews.Url,
             source!,
-            "http://www.imageurl.com",
-            new List<string> { "Author1", "Author2" },
-            0.5m,
-            "Neutral");
+            validMarketNews.ImageUrl,
+            validMarketNews.Authors,
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -146,22 +154,24 @@ public class MarketNewsTest
     [InlineData(1)] 
     public void Instantiate_InvalidPublishDate(int daysInTheFuture)
     {
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
         var futureDate = DateTime.Now.AddDays(daysInTheFuture);
 
         Action action = () => new DomainEntity.MarketNews(
-            "Test Title",
-            "Test Summary",
+            validMarketNews.Title,
+            validMarketNews.Summary,
             futureDate,
-            "http://www.teste.com.br",
-            "Test Source",
-            "http://www.imageurl.com",
-            new List<string> { "Author1", "Author2" },
-            0.5m,
-            "Neutral");
+            validMarketNews.Url,
+            validMarketNews.Source,
+            validMarketNews.ImageUrl,
+            validMarketNews.Authors,
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );            
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Publish date cannot be in the future.");
+            .WithMessage("PublishDate date cannot be in the future.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidAuthors))]
@@ -169,16 +179,19 @@ public class MarketNewsTest
     [MemberData(nameof(GetInvalidAuthors))]
     public void Instantiate_InvalidAuthors(List<string> authors)
     {
+        var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
+
         Action action = () => new DomainEntity.MarketNews(
-            "Test Title",
-            "Test Summary",
-            DateTime.Now.AddDays(-2),
-            "http://www.teste.com.br",
-            "Test Source",
-            "http://www.imageurl.com",
+            validMarketNews.Title,
+            validMarketNews.Summary,
+            validMarketNews.PublishDate,
+            validMarketNews.Url,
+            validMarketNews.Source,
+            validMarketNews.ImageUrl,
             authors,
-            0.5m,
-            "Neutral");
+            validMarketNews.OverallSentimentScore,
+            validMarketNews.OverallSentimentLabel
+            );
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -190,5 +203,7 @@ public class MarketNewsTest
         yield return new object[] { new List<string>() };
         yield return new object[] { null! };
     }
+
+
 
 }

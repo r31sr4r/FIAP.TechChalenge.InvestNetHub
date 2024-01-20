@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Domain", "src\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj", "{E5884A69-0D95-4669-A800-56FB27473033}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Application", "src\FIAP.TechChalenge.InvestNetHub.Application\FIAP.TechChalenge.InvestNetHub.Application.csproj", "{4334E0ED-81C8-4CC8-8DE0-7216D610E771}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{E5884A69-0D95-4669-A800-56FB27473033}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5884A69-0D95-4669-A800-56FB27473033}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5884A69-0D95-4669-A800-56FB27473033}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4334E0ED-81C8-4CC8-8DE0-7216D610E771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4334E0ED-81C8-4CC8-8DE0-7216D610E771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4334E0ED-81C8-4CC8-8DE0-7216D610E771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4334E0ED-81C8-4CC8-8DE0-7216D610E771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{084671CE-39E3-4AE4-99DC-52EB10A5AAEA} = {B4CE72DD-6728-4764-AFB9-099FA5CAF7C0}
 		{E5884A69-0D95-4669-A800-56FB27473033} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
+		{4334E0ED-81C8-4CC8-8DE0-7216D610E771} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB70723-DE7F-4EF4-B7E2-9DAC4836C8CA}
