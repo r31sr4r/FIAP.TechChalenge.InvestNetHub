@@ -62,7 +62,10 @@ public class CreateMarketNewsTest
 
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiate))]
     [Trait("Application", "CreateMarketNews - Use Cases")]
-    [MemberData(nameof(GetInvalidInputs))]
+    [MemberData(
+        nameof(CreateMarketNewsTestDataGenerator.GetInvalidInputs),
+        MemberType = typeof(CreateMarketNewsTestDataGenerator)
+    )]
     public async void ThrowWhenCantInstantiate(
         CreateMarketNewsInput input,
         string exceptionMessage
@@ -78,113 +81,5 @@ public class CreateMarketNewsTest
         await task.Should()
                 .ThrowAsync<EntityValidationException>()
                 .WithMessage(exceptionMessage);
-    }
-
-    public static IEnumerable<object[]> GetInvalidInputs()
-    {
-        var fixture = new CreateMarketNewsTestFixture();
-        var invalidInputList = new List<object[]>();
-
-        var invalidInputEmptyTitle = fixture.GetInput();
-        invalidInputEmptyTitle.Title = string.Empty;
-
-        var invalidInputNullTitle = fixture.GetInput();
-        invalidInputNullTitle.Title = null!;
-
-        var invalidInputEmptySummary = fixture.GetInput();
-        invalidInputEmptySummary.Summary = string.Empty;
-
-        var invalidInputNullSummary = fixture.GetInput();
-        invalidInputNullSummary.Summary = null!;
-
-        var invalidInputEmptyUrl = fixture.GetInput();
-        invalidInputEmptyUrl.Url = string.Empty;
-
-        var invalidInputNullUrl = fixture.GetInput();
-        invalidInputNullUrl.Url = null!;
-
-        var invalidInputEmptySource = fixture.GetInput();
-        invalidInputEmptySource.Source = string.Empty;
-
-        var invalidInputNullSource = fixture.GetInput();
-        invalidInputNullSource.Source = null!;
-
-        var invalidInputEmptyAuthors = fixture.GetInput();
-        invalidInputEmptyAuthors.Authors = new List<string>();
-
-        var invalidInputNullAuthors = fixture.GetInput();
-        invalidInputNullAuthors.Authors = null!;
-
-        var invalidInputublishDateInTheFuture = fixture.GetInput();
-        invalidInputublishDateInTheFuture.PublishDate = DateTime.Now.AddDays(1);
-
- 
-        invalidInputList.Add(new object[] 
-        {
-            invalidInputEmptyTitle,
-            $"{nameof(invalidInputEmptyTitle.Title)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputNullTitle,
-            $"{nameof(invalidInputNullTitle.Title)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputEmptySummary,
-            $"{nameof(invalidInputEmptySummary.Summary)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputNullSummary,
-            $"{nameof(invalidInputNullSummary.Summary)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputEmptyUrl,
-            $"{nameof(invalidInputEmptyUrl.Url)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputNullUrl,
-            $"{nameof(invalidInputNullUrl.Url)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputEmptySource,
-            $"{nameof(invalidInputEmptySource.Source)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputNullSource,
-            $"{nameof(invalidInputNullSource.Source)} cannot be empty or null."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputEmptyAuthors,
-            $"{nameof(invalidInputEmptyAuthors.Authors)} list cannot be empty."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputNullAuthors,
-            $"{nameof(invalidInputNullAuthors.Authors)} list cannot be empty."
-        });
-
-        invalidInputList.Add(new object[]
-        {
-            invalidInputublishDateInTheFuture,
-            $"{nameof(invalidInputublishDateInTheFuture.PublishDate)} date cannot be in the future."
-        });
-
-        return invalidInputList;
     }
 }

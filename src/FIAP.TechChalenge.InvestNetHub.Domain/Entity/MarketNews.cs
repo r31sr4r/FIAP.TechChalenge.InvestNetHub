@@ -49,6 +49,8 @@ public class MarketNews : AggregateRoot
         DomainValidation.DateNotInFuture(PublishDate, nameof(PublishDate));
         DomainValidation.NotNullOrEmpty(Url, nameof(Url));
         DomainValidation.NotNullOrEmpty(Source, nameof(Source));
+        DomainValidation.NotNullOrEmpty(ImageUrl, nameof(ImageUrl));
+        DomainValidation.NotNullOrEmpty(OverallSentimentLabel, nameof(OverallSentimentLabel));
         
         if (!ValidateAuthors(Authors))
             throw new EntityValidationException($"{nameof(Authors)} list cannot be empty.");
