@@ -8,11 +8,11 @@ public class ListMarketNewsInput
 {
     public ListMarketNewsInput(
         int page,
-        int pageSize,
+        int perPage,
         string search
         , string sort,
         SearchOrder dir) 
-        : base(page, pageSize, search, sort, dir)
+        : base(page, perPage, search, sort, dir)
     {
     }
 }

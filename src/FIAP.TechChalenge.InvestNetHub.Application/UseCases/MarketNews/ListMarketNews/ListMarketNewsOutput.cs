@@ -7,10 +7,10 @@ public class ListMarketNewsOutput
 {
     public ListMarketNewsOutput(
         int page, 
-        int pageSize, 
+        int perPage, 
         int total, 
         IReadOnlyList<MarketNewsModelOutput> items) 
-        : base(page, pageSize, total, items)
+        : base(page, perPage, total, items)
     {
     }
 }

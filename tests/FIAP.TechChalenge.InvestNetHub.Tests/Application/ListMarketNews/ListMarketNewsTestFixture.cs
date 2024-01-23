@@ -1,5 +1,4 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+﻿using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
 using FIAP.TechChalenge.InvestNetHub.Tests.Common;
 using Moq;
@@ -9,10 +8,9 @@ namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
 [CollectionDefinition(nameof(ListMarketNewsTestFixture))]
 public class ListMarketNewsTextFixtureCollection
     : ICollectionFixture<ListMarketNewsTestFixture>
-{}
+{ }
 
-public class ListMarketNewsTestFixture
-    : BaseFixture
+public class ListMarketNewsTestFixture : BaseFixture
 {
     public Mock<IMarketNewsRepository> GetRepositoryMock()
         => new();

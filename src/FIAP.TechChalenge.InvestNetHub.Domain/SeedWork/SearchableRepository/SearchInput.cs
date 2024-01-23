@@ -3,16 +3,17 @@ public class SearchInput
 {
     public SearchInput(
         int page, 
-        int perPage, 
+        int perPage,
+        string search,
         string orderBy, 
-        SearchOrder order, 
-        string search)
+        SearchOrder order
+        )
     {
         Page = page;
         PerPage = perPage;
+        Search = search;
         OrderBy = orderBy;
         Order = order;
-        Search = search;
     }
 
     public int Page { get; set; }

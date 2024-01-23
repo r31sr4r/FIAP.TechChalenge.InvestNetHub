@@ -1,8 +1,6 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
 using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
-using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
 using FluentAssertions;
 using Moq;
 using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;

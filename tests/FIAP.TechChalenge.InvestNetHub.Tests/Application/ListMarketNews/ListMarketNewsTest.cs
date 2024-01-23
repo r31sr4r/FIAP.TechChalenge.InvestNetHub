@@ -1,9 +1,13 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+﻿using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
+using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using Moq;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
+using FluentAssertions;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
 
-[CollectionDefinition(nameof(ListMarketNewsTestFixture))]
+[Collection(nameof(ListMarketNewsTestFixture))]
 public class ListMarketNewsTest
 {
     private readonly ListMarketNewsTestFixture _fixture;
@@ -19,7 +23,7 @@ public class ListMarketNewsTest
     {
         var marketNewsList = _fixture.GetExampleMarketNewsList();
         var repositoryMock = _fixture.GetRepositoryMock();
-        var input = new ListMarketNewsInput(
+        var input = new UseCases.ListMarketNewsInput(
             page: 2,
             perPage: 15,
             search: "search-example",
@@ -27,25 +31,25 @@ public class ListMarketNewsTest
             dir: SearchOrder.Asc
         );
 
-        var outputRepositorySearch = new OutputSearch<MarketNews>(
+        var outputRepositorySearch = new SearchOutput<MarketNews>(
                 currentPage: input.Page,
                 perPage: input.PerPage,
-                Items: (IReadOnlyList<MarketNews>)marketNewsList,
-                Total: 100
+                items: (IReadOnlyList<MarketNews>)marketNewsList,
+                total: 100
         );
 
         repositoryMock.Setup(x => x.Search(
             It.Is<SearchInput>(
-                searchInput.Page == input.Page
+                searchInput => searchInput.Page == input.Page
                 && searchInput.PerPage == input.PerPage
                 && searchInput.Search == input.Search
-                && searchInput.Sort == input.Sort
-                && searchInput.Dir == input.Dir                 
+                && searchInput.OrderBy == input.Sort
+                && searchInput.Order == input.Dir                 
             ),
             It.IsAny<CancellationToken>()
-        )).ReturnsAsync();
+        )).ReturnsAsync(outputRepositorySearch);
 
-        var useCase = new ListMarketNews(repositoryMock.Object);
+        var useCase = new UseCases.ListMarketNews(repositoryMock.Object);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -54,28 +58,31 @@ public class ListMarketNewsTest
         output.PerPage.Should().Be(outputRepositorySearch.PerPage);
         output.Total.Should().Be(outputRepositorySearch.Total);
         output.Items.Should().HaveCount(outputRepositorySearch.Items.Count);
-        output.Items.ForEach(outputItem =>
+        ((List<MarketNewsModelOutput>)output.Items).ForEach(outputItem =>
         {
             var repositoryMarketNews = outputRepositorySearch.Items
-                .Find(x => x.Id == outputItem.Id);
+                .FirstOrDefault(x => x.Id == outputItem.Id);
             outputItem.Should().NotBeNull();
-            outputItem.Title.Should().Be(repositoryMarketNews.Title);
+            outputItem.Title.Should().Be(repositoryMarketNews!.Title);
             outputItem.Summary.Should().Be(repositoryMarketNews.Summary);
             outputItem.PublishDate.Should().Be(repositoryMarketNews.PublishDate);
             outputItem.Url.Should().Be(repositoryMarketNews.Url);
             outputItem.Source.Should().Be(repositoryMarketNews.Source);
             outputItem.ImageUrl.Should().Be(repositoryMarketNews.ImageUrl);
-            outputItem.Authors.Should().Be(repositoryMarketNews.Authors);
+            outputItem.Authors.ForEach(author =>
+            {
+                repositoryMarketNews.Authors.Should().Contain(author);
+            });
             outputItem.OverallSentimentScore.Should().Be(repositoryMarketNews.OverallSentimentScore);
             outputItem.OverallSentimentLabel.Should().Be(repositoryMarketNews.OverallSentimentLabel);
         });
         repositoryMock.Verify(x => x.Search(
             It.Is<SearchInput>(
-                searchInput.Page == input.Page
+                searchInput => searchInput.Page == input.Page
                 && searchInput.PerPage == input.PerPage
                 && searchInput.Search == input.Search
-                && searchInput.Sort == input.Sort
-                && searchInput.Dir == input.Dir                 
+                && searchInput.OrderBy == input.Sort
+                && searchInput.Order == input.Dir
             ),
             It.IsAny<CancellationToken>()
         ), Times.Once);
