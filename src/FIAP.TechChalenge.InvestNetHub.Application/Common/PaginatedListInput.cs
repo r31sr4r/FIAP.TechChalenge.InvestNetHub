@@ -17,9 +17,9 @@ public abstract class PaginatedListInput
         Dir = dir;
     }
 
-    public int Page { get; set; } = 1;
-    public int PerPage { get; set; } = 10;
-    public string Search { get; set; } = string.Empty;
+    public int Page { get; set; }
+    public int PerPage { get; set; }
+    public string Search { get; set; }
     public string Sort { get; set; }
-    public SearchOrder Dir { get; set; } = SearchOrder.Asc;
+    public SearchOrder Dir { get; set; }
 }

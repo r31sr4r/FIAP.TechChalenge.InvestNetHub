@@ -1,6 +1,9 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
+using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using FIAP.TechChalenge.InvestNetHub.Tests.Common;
+using FIAP.TechChalenge.InvestNetHub.UnitTests.Application.Common;
 using Moq;
 
 namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
@@ -10,10 +13,9 @@ public class ListMarketNewsTextFixtureCollection
     : ICollectionFixture<ListMarketNewsTestFixture>
 { }
 
-public class ListMarketNewsTestFixture : BaseFixture
+public class ListMarketNewsTestFixture 
+    : MarketNewsUseCasesBaseFixture
 {
-    public Mock<IMarketNewsRepository> GetRepositoryMock()
-        => new();
 
     public List<MarketNews> GetExampleMarketNewsList(int lenght = 10)
     {
@@ -40,42 +42,17 @@ public class ListMarketNewsTestFixture : BaseFixture
             GetValidOverallSentimentLabel()
         );
 
-    public string GetValidTitle()
-        => Faker.Name.Random.String2(10);
 
-    public string GetValidSummary()
-        => Faker.Lorem.Paragraph();
-
-    public DateTime GetValidPublishDate()
-        => Faker.Date.Past();
-
-    public string GetValidUrl()
-        => Faker.Internet.Url();
-
-    public string GetValidSource()
-        => Faker.Name.Random.String2(10);
-    public string GetValidImageUrl()
-    => Faker.Internet.Url();
-
-    public List<string> GetValidAuthors()
+    public ListMarketNewsInput GetExampleInput()
     {
-        int authorsCount = Faker.Random.Int(1, 10);
-        List<string> authors = new List<string>();
-        for (int i = 0; i < authorsCount; i++)
-        {
-            authors.Add(GetValidAuthor());
-        }
-        return authors;
-
+        var random = new Random();
+        return new ListMarketNewsInput(
+            page: random.Next(1, 10),
+            perPage: random.Next(15, 100),
+            search: Faker.Commerce.ProductName(),
+            sort: Faker.Commerce.ProductName(),
+            dir: random.Next(0, 10) > 5 ? SearchOrder.Asc : SearchOrder.Desc
+        );
     }
-
-    public string GetValidAuthor()
-        => Faker.Name.Random.String2(10);
-
-    public decimal GetValidOverallSentimentScore()
-        => Faker.Random.Decimal(0, 1);
-
-    public string GetValidOverallSentimentLabel()
-        => Faker.Name.Random.String2(10);
 
 }

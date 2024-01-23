@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{21B1678D-720
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B4CE72DD-6728-4764-AFB9-099FA5CAF7C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Tests", "tests\FIAP.TechChalenge.InvestNetHub.Tests\FIAP.TechChalenge.InvestNetHub.Tests.csproj", "{084671CE-39E3-4AE4-99DC-52EB10A5AAEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.UnitTests", "tests\FIAP.TechChalenge.InvestNetHub.Tests\FIAP.TechChalenge.InvestNetHub.UnitTests.csproj", "{084671CE-39E3-4AE4-99DC-52EB10A5AAEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Domain", "src\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj", "{E5884A69-0D95-4669-A800-56FB27473033}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Domain", "src\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj", "{E5884A69-0D95-4669-A800-56FB27473033}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Application", "src\FIAP.TechChalenge.InvestNetHub.Application\FIAP.TechChalenge.InvestNetHub.Application.csproj", "{4334E0ED-81C8-4CC8-8DE0-7216D610E771}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Application", "src\FIAP.TechChalenge.InvestNetHub.Application\FIAP.TechChalenge.InvestNetHub.Application.csproj", "{4334E0ED-81C8-4CC8-8DE0-7216D610E771}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
