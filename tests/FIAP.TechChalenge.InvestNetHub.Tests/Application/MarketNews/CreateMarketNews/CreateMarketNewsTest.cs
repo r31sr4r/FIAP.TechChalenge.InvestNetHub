@@ -1,11 +1,11 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
+using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.CreateMarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.CreateMarketNews;
 
 [Collection(nameof(CreateMarketNewsTestFixture))]
 public class CreateMarketNewsTest
@@ -33,7 +33,7 @@ public class CreateMarketNewsTest
 
         repositoryMock.Verify(
             repository => repository.Insert(
-                It.IsAny<MarketNews>(), 
+                It.IsAny<DomainEntity.MarketNews>(),
                 It.IsAny<CancellationToken>()
             ),
             Times.Once

@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Common;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Common;
 public abstract class BaseFixture
 {
     protected BaseFixture()

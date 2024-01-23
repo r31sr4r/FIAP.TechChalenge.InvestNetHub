@@ -1,11 +1,11 @@
 ﻿using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using Moq;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using FluentAssertions;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.ListMarketNews;
 
 [Collection(nameof(ListMarketNewsTestFixture))]
 public class ListMarketNewsTest
@@ -25,11 +25,11 @@ public class ListMarketNewsTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var input = _fixture.GetExampleInput();
 
-        var outputRepositorySearch = new SearchOutput<MarketNews>(
+        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
                 currentPage: input.Page,
                 perPage: input.PerPage,
-                items: (IReadOnlyList<MarketNews>)marketNewsList,
-                total: (new Random()).Next(50, 200)
+                items: (IReadOnlyList<DomainEntity.MarketNews>)marketNewsList,
+                total: new Random().Next(50, 200)
         );
 
         repositoryMock.Setup(x => x.Search(
@@ -38,7 +38,7 @@ public class ListMarketNewsTest
                 && searchInput.PerPage == input.PerPage
                 && searchInput.Search == input.Search
                 && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir                 
+                && searchInput.Order == input.Dir
             ),
             It.IsAny<CancellationToken>()
         )).ReturnsAsync(outputRepositorySearch);
@@ -94,11 +94,11 @@ public class ListMarketNewsTest
         var marketNewsList = _fixture.GetExampleMarketNewsList();
         var repositoryMock = _fixture.GetRepositoryMock();
 
-        var outputRepositorySearch = new SearchOutput<MarketNews>(
+        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
                 currentPage: input.Page,
                 perPage: input.PerPage,
-                items: (IReadOnlyList<MarketNews>)marketNewsList,
-                total: (new Random()).Next(50, 200)
+                items: (IReadOnlyList<DomainEntity.MarketNews>)marketNewsList,
+                total: new Random().Next(50, 200)
         );
 
         repositoryMock.Setup(x => x.Search(
@@ -158,10 +158,10 @@ public class ListMarketNewsTest
         var repositoryMock = _fixture.GetRepositoryMock();
         var input = _fixture.GetExampleInput();
 
-        var outputRepositorySearch = new SearchOutput<MarketNews>(
+        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
                 currentPage: input.Page,
                 perPage: input.PerPage,
-                items: (new List<MarketNews>()).AsReadOnly(),
+                items: new List<DomainEntity.MarketNews>().AsReadOnly(),
                 total: 0
         );
 

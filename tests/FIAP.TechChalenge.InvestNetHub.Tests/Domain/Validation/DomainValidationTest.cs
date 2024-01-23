@@ -3,7 +3,7 @@ using FluentAssertions;
 using FIAP.TechChalenge.InvestNetHub.Domain.Validation;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Validation;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Validation;
 public class DomainValidationTest
 {
     private Faker Faker { get; set; } = new Faker("pt_BR");
@@ -52,7 +52,7 @@ public class DomainValidationTest
     [InlineData("")]
     [InlineData(" ")]
     public void NotNullOrEmptyThrowException(string? target)
-    { 
+    {
         Action action =
             () => DomainValidation.NotNullOrEmpty(target, "FieldName");
 

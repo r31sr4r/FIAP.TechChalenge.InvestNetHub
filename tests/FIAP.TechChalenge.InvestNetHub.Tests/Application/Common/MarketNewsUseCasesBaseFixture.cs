@@ -1,6 +1,6 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
-using FIAP.TechChalenge.InvestNetHub.Tests.Common;
+using FIAP.TechChalenge.InvestNetHub.UnitTests.Common;
 using Moq;
 
 namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.Common;

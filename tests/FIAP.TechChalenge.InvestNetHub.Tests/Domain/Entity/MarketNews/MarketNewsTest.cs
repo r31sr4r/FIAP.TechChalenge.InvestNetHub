@@ -2,14 +2,14 @@
 using FluentAssertions;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Entity.MarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.MarketNews;
 
 [Collection(nameof(MarketNewsTestFixture))]
 public class MarketNewsTest
 {
     private readonly MarketNewsTestFixture _marketNewsTestFixturee;
 
-    public MarketNewsTest(MarketNewsTestFixture marketNewsTestFixturee) 
+    public MarketNewsTest(MarketNewsTestFixture marketNewsTestFixturee)
         => _marketNewsTestFixturee = marketNewsTestFixturee;
 
     [Fact(DisplayName = nameof(Instantiate))]
@@ -32,7 +32,7 @@ public class MarketNewsTest
 
         marketNews.Should().NotBeNull();
         marketNews.Should().BeOfType<DomainEntity.MarketNews>();
-        marketNews.Id.Should().NotBeEmpty();        
+        marketNews.Id.Should().NotBeEmpty();
         marketNews.Title.Should().Be(validMarketNews.Title);
         marketNews.Summary.Should().Be(validMarketNews.Summary);
         marketNews.PublishDate.Should().Be(validMarketNews.PublishDate);
@@ -42,7 +42,7 @@ public class MarketNewsTest
         marketNews.Authors.Should().BeEquivalentTo(validMarketNews.Authors);
         marketNews.OverallSentimentScore.Should().Be(validMarketNews.OverallSentimentScore);
         marketNews.OverallSentimentLabel.Should().Be(validMarketNews.OverallSentimentLabel);
-        
+
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidTitle))]
@@ -91,7 +91,7 @@ public class MarketNewsTest
             validMarketNews.OverallSentimentScore,
             validMarketNews.OverallSentimentLabel
             );
-            
+
         action.Should()
             .Throw<EntityValidationException>()
             .WithMessage("Summary cannot be empty or null.");
@@ -116,7 +116,7 @@ public class MarketNewsTest
             validMarketNews.Authors,
             validMarketNews.OverallSentimentScore,
             validMarketNews.OverallSentimentLabel
-            );            
+            );
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -146,12 +146,12 @@ public class MarketNewsTest
 
         action.Should()
             .Throw<EntityValidationException>()
-            .WithMessage("Source cannot be empty or null.");        
+            .WithMessage("Source cannot be empty or null.");
     }
 
     [Theory(DisplayName = nameof(Instantiate_InvalidPublishDate))]
     [Trait("Domain", "MarketNews - Aggregates")]
-    [InlineData(1)] 
+    [InlineData(1)]
     public void Instantiate_InvalidPublishDate(int daysInTheFuture)
     {
         var validMarketNews = _marketNewsTestFixturee.GetValidMarketNews();
@@ -167,7 +167,7 @@ public class MarketNewsTest
             validMarketNews.Authors,
             validMarketNews.OverallSentimentScore,
             validMarketNews.OverallSentimentLabel
-            );            
+            );
 
         action.Should()
             .Throw<EntityValidationException>()

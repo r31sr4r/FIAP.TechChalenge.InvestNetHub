@@ -1,4 +1,4 @@
-﻿namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.CreateMarketNews;
+﻿namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.CreateMarketNews;
 public class CreateMarketNewsTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs()

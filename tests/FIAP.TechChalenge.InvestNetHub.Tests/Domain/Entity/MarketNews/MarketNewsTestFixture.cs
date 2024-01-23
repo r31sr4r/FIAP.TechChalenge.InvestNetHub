@@ -1,7 +1,7 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Tests.Common;
+﻿using FIAP.TechChalenge.InvestNetHub.UnitTests.Common;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Domain.Entity.MarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.MarketNews;
 
 [CollectionDefinition(nameof(MarketNewsTestFixture))]
 public class MarketNewsTestFixtureCollection
@@ -15,7 +15,7 @@ public class MarketNewsTestFixture : BaseFixture
     { }
 
     public DomainEntity.MarketNews GetValidMarketNews()
-        => new (
+        => new(
             GetValidTitle(),
             GetValidSummary(),
             GetValidPublishDate(),
@@ -53,7 +53,7 @@ public class MarketNewsTestFixture : BaseFixture
             authors.Add(GetValidAuthor());
         }
         return authors;
-        
+
     }
 
     public string GetValidAuthor()

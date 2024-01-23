@@ -1,6 +1,6 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.ListMarketNews;
 public class ListMarketNewsTestDataGenerator
 {
     public static IEnumerable<object[]> GetInputWithoutAllParameters(int times = 15)
@@ -12,41 +12,41 @@ public class ListMarketNewsTestDataGenerator
             switch (i % 5)
             {
                 case 0:
-                    yield return new object[] 
-                    { 
-                        new ListMarketNewsInput() 
+                    yield return new object[]
+                    {
+                        new ListMarketNewsInput()
                     };
                     break;
                 case 1:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         new ListMarketNewsInput(
                             page: inputExample.Page
-                        ) 
+                        )
                     };
                     break;
                 case 2:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         new ListMarketNewsInput(
                             page: inputExample.Page,
                             perPage: inputExample.PerPage
-                        ) 
+                        )
                     };
                     break;
                 case 3:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         new ListMarketNewsInput(
                             page: inputExample.Page,
                             perPage: inputExample.PerPage,
-                            search: inputExample.Search                        
+                            search: inputExample.Search
                         )
                     };
                     break;
                 case 4:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         new ListMarketNewsInput(
                             page: inputExample.Page,
                             perPage: inputExample.PerPage,
@@ -56,15 +56,15 @@ public class ListMarketNewsTestDataGenerator
                     };
                     break;
                 case 5:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         inputExample
                     };
                     break;
 
                 default:
-                    yield return new object[] 
-                    { 
+                    yield return new object[]
+                    {
                         new ListMarketNewsInput()
                     };
                     break;
@@ -73,7 +73,7 @@ public class ListMarketNewsTestDataGenerator
 
 
 
-        
+
     }
 
 

@@ -1,18 +1,14 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
-using FIAP.TechChalenge.InvestNetHub.Tests.Common;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
 using FIAP.TechChalenge.InvestNetHub.UnitTests.Application.Common;
-using Moq;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.CreateMarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.CreateMarketNews;
 
 [CollectionDefinition(nameof(CreateMarketNewsTestFixture))]
-public class CreateMarketNewsTestFixtureCollection 
+public class CreateMarketNewsTestFixtureCollection
     : ICollectionFixture<CreateMarketNewsTestFixture>
 { }
 
-public class CreateMarketNewsTestFixture 
+public class CreateMarketNewsTestFixture
     : MarketNewsUseCasesBaseFixture
 {
     public CreateMarketNewsInput GetInput()
@@ -111,7 +107,7 @@ public class CreateMarketNewsTestFixture
         invalidInputNullOverallSentimentLabel.OverallSentimentLabel = null!;
         return invalidInputNullOverallSentimentLabel;
     }
-        public CreateMarketNewsInput GetInvalidInputInvalidPublishDate()
+    public CreateMarketNewsInput GetInvalidInputInvalidPublishDate()
     {
         var invalidInputDateInTheFuture = GetInput();
         invalidInputDateInTheFuture.PublishDate = DateTime.Now.AddDays(1);

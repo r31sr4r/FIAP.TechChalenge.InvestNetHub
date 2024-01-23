@@ -1,25 +1,22 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
-using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
-using FIAP.TechChalenge.InvestNetHub.Tests.Common;
 using FIAP.TechChalenge.InvestNetHub.UnitTests.Application.Common;
-using Moq;
+using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
-namespace FIAP.TechChalenge.InvestNetHub.Tests.Application.ListMarketNews;
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.ListMarketNews;
 
 [CollectionDefinition(nameof(ListMarketNewsTestFixture))]
 public class ListMarketNewsTextFixtureCollection
     : ICollectionFixture<ListMarketNewsTestFixture>
 { }
 
-public class ListMarketNewsTestFixture 
+public class ListMarketNewsTestFixture
     : MarketNewsUseCasesBaseFixture
 {
 
-    public List<MarketNews> GetExampleMarketNewsList(int lenght = 10)
+    public List<DomainEntity.MarketNews> GetExampleMarketNewsList(int lenght = 10)
     {
-        var marketNewsList = new List<MarketNews>();
+        var marketNewsList = new List<DomainEntity.MarketNews>();
         for (int i = 0; i < lenght; i++)
         {
             marketNewsList.Add(GetExampleMarketNews());
@@ -29,7 +26,7 @@ public class ListMarketNewsTestFixture
 
     }
 
-    public MarketNews GetExampleMarketNews()
+    public DomainEntity.MarketNews GetExampleMarketNews()
         => new(
             GetValidTitle(),
             GetValidSummary(),
