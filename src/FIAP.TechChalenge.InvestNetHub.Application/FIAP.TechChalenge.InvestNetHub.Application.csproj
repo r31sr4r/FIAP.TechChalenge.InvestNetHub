@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj" />
   </ItemGroup>
 

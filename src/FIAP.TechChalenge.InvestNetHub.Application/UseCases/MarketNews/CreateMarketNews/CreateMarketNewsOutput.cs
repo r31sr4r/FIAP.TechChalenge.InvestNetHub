@@ -1,4 +1,6 @@
-﻿namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews;
+﻿using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+
+namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews;
 public class CreateMarketNewsOutput
 {
     public CreateMarketNewsOutput(
@@ -36,4 +38,20 @@ public class CreateMarketNewsOutput
     public List<string> Authors { get; set; }
     public decimal OverallSentimentScore { get; set; }
     public string OverallSentimentLabel { get; set; }
+
+    public static CreateMarketNewsOutput FromMarketNews(DomainEntity.MarketNews marketNews)
+    {
+        return new CreateMarketNewsOutput(
+            marketNews.Id,
+            marketNews.Title,
+            marketNews.Summary,
+            marketNews.PublishDate,
+            marketNews.Url,
+            marketNews.Source,
+            marketNews.ImageUrl,
+            marketNews.Authors,
+            marketNews.OverallSentimentScore,
+            marketNews.OverallSentimentLabel
+        );
+    }
 }

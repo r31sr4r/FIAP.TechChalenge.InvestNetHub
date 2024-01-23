@@ -35,18 +35,7 @@ public class CreateMarketNews : ICreateMarketNews
         await _marketNewsRepository.Insert(marketNews, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return new CreateMarketNewsOutput(
-            marketNews.Id,
-            marketNews.Title,
-            marketNews.Summary,
-            marketNews.PublishDate,
-            marketNews.Url,
-            marketNews.Source,
-            marketNews.ImageUrl,
-            marketNews.Authors,
-            marketNews.OverallSentimentScore,
-            marketNews.OverallSentimentLabel
-        );
+        return CreateMarketNewsOutput.FromMarketNews(marketNews);            
 
     }
 }

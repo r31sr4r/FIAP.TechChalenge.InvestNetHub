@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
-namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-public class CreateMarketNewsInput : IRequest<CreateMarketNewsOutput>
+namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
+public class MarketNewsModelOutput
 {
-    public CreateMarketNewsInput(
+    public MarketNewsModelOutput(
+        Guid id, 
         string title,
         string summary,
         DateTime publishDate,
@@ -12,9 +13,9 @@ public class CreateMarketNewsInput : IRequest<CreateMarketNewsOutput>
         string imageUrl,
         List<string> authors,
         decimal overallSentimentScore,
-        string overallSentimentLabel
-        )
+        string overallSentimentLabel)
     {
+        Id = id;
         Title = title;
         Summary = summary;
         PublishDate = publishDate;
@@ -26,6 +27,7 @@ public class CreateMarketNewsInput : IRequest<CreateMarketNewsOutput>
         OverallSentimentLabel = overallSentimentLabel;
     }
 
+    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Summary { get; set; }
     public DateTime PublishDate { get; set; }
@@ -35,4 +37,21 @@ public class CreateMarketNewsInput : IRequest<CreateMarketNewsOutput>
     public List<string> Authors { get; set; }
     public decimal OverallSentimentScore { get; set; }
     public string OverallSentimentLabel { get; set; }
+
+    public static MarketNewsModelOutput FromMarketNews(DomainEntity.MarketNews marketNews)
+    {
+        return new MarketNewsModelOutput(
+            marketNews.Id,
+            marketNews.Title,
+            marketNews.Summary,
+            marketNews.PublishDate,
+            marketNews.Url,
+            marketNews.Source,
+            marketNews.ImageUrl,
+            marketNews.Authors,
+            marketNews.OverallSentimentScore,
+            marketNews.OverallSentimentLabel
+            );
+    }
+
 }
