@@ -1,0 +1,9 @@
+{
+  "ExternalServices": {
+    "AlphaVantage": {
+      "BaseUrl": "https://www.alphavantage.co/query",
+      "ApiKey": "RWN38XDYHKGG35SB",
+      "NewsFunction": "NEWS_SENTIMENT"
+    }
+  }
+}
