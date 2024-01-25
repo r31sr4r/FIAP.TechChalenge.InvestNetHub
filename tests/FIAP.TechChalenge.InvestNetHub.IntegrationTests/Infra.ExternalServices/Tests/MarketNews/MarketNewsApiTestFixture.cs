@@ -12,7 +12,7 @@ public class MarketNewsApiTestFixture
 {
     private readonly Faker _faker = new Faker();
 
-    public string GetRandomTicker() => _faker.PickRandom(new List<string> { "IBM", "AAPL", "COIN", "BTC", "USD" });
+    public string GetRandomTicker() => _faker.PickRandom(new List<string> { "IBM", "AAPL", "COIN:BTC", "FOREX:USD" });
 
     public List<string> GetRandomTopics() => _faker.Random.Shuffle(new List<string>
     {
@@ -22,11 +22,12 @@ public class MarketNewsApiTestFixture
         "manufacturing", "real_estate", "retail_wholesale", "technology"
     }).Take(_faker.Random.Int(1, 5)).ToList();
 
-    public string GetValidTicker() => "AAPL";
-    public string GetValidTopic() => "technology";
-    public string GetValidTimeFrom() => "20220101T0000";
-    public string GetValidTimeTo() => "20221231T2359";
-    public string GetValidSort() => "LATEST";
-    public int GetValidLimit() => 50;
+    public string GetRandomTimeFrom() => _faker.Date.Past(1).ToString("yyyyMMddTHHmm");
+
+    public string GetRandomTimeTo() => _faker.Date.Future(1).ToString("yyyyMMddTHHmm");
+
+    public string GetRandomSort() => _faker.PickRandom(new List<string> { "LATEST", "EARLIEST", "RELEVANCE" });
+
+    public int GetRandomLimit() => _faker.Random.Int(10, 1000);
 
 }

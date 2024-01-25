@@ -7,15 +7,18 @@ public class ApiClientBaseFixture
 {
     public HttpClient Client { get; private set; }
     public string? ApiKey { get; private set; }
+    public string? BaseUrl { get; private set; }
 
     public ApiClientBaseFixture()
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(Path.Combine(AppContext.BaseDirectory, "Infra.ExternalServices", "Configurations"))
             .AddJsonFile("apiSettings.json")
             .Build();
 
         Client = new HttpClient();
         ApiKey = configuration["ExternalServices:AlphaVantage:ApiKey"];
+        BaseUrl = configuration["ExternalServices:AlphaVantage:BaseUrl"]; 
     }
 }
+
