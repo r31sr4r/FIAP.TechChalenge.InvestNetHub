@@ -9,17 +9,21 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Common
         protected HttpClient Client;
         protected string? ApiKey;
         protected string? BaseUrl;
+        protected string? NewsFunction;
 
-        protected ApiClientBase(string apiKeyConfigPath, string baseUrlConfigPath)
+        protected ApiClientBase(string providerName)
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false)
+                .SetBasePath(Path.Combine(AppContext.BaseDirectory, "Infra.ExternalServices", "Configurations"))
+                .AddJsonFile("apiSettings.json", optional: false)
                 .Build();
 
+            var providerSection = configuration.GetSection($"ExternalServices:{providerName}");
+
             Client = new HttpClient();
-            ApiKey = configuration[apiKeyConfigPath];
-            BaseUrl = configuration[baseUrlConfigPath];
+            ApiKey = providerSection["ApiKey"];
+            BaseUrl = providerSection["BaseUrl"];
+            NewsFunction = providerSection["NewsFunction"];
         }
     }
 }
