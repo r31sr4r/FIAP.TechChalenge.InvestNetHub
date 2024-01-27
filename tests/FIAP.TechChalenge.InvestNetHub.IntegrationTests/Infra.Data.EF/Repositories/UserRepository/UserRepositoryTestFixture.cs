@@ -1,19 +1,20 @@
-﻿using Bogus;
-using Bogus.DataSets;
-using Bogus.Extensions.Brazil;
-using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
-using FIAP.TechChalenge.InvestNetHub.UnitTests.Common;
-using Moq;
-using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+﻿using Bogus.Extensions.Brazil;
+using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
+using FIAP.TechChalenge.InvestNetHub.IntegrationTests.Base;
+using Microsoft.EntityFrameworkCore;
 
-namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.User.Common;
-public class UserUseCasesBaseFixture
+namespace FIAP.TechChalenge.InvestNetHub.IntegrationTests.Infra.Data.EF.Repositories.UserRepository;
+
+
+[CollectionDefinition(nameof(UserRepositoryTestFixture))]
+public class UserRepositoryTestFixtureCollection
+    : ICollectionFixture<UserRepositoryTestFixture>
+{ }
+
+public class UserRepositoryTestFixture
     : BaseFixture
-{    public Mock<IUserRepository> GetRepositoryMock() => new();
-
-    public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
-
+{
     public string GetValidUserName()
     {
         var userName = "";
@@ -24,7 +25,7 @@ public class UserUseCasesBaseFixture
         return userName;
     }
 
-    public string GetValidEmail() 
+    public string GetValidEmail()
         => Faker.Internet.Email();
 
     public string GetValidPhone()
@@ -51,7 +52,7 @@ public class UserUseCasesBaseFixture
     public bool GetRandomBoolean()
     => new Random().NextDouble() < 0.5;
 
-    public DomainEntity.User GetValidUser()
+    public User GetExampleUser()
         => new(
             GetValidUserName(),
             GetValidEmail(),
@@ -62,7 +63,11 @@ public class UserUseCasesBaseFixture
             GetValidPassword()
         );
 
-    public DomainEntity.User GetValidUserWithoutPassword()
+    public List<User> GetExampleUserList(int lenght = 10)
+        => Enumerable.Range(1, lenght)
+            .Select(_ => GetExampleUser()).ToList();
+
+    public User GetValidUserWithoutPassword()
         => new(
             GetValidUserName(),
             GetValidEmail(),
@@ -73,10 +78,13 @@ public class UserUseCasesBaseFixture
             string.Empty
         );
 
-    public List<DomainEntity.User> GeUsersList(int lenght = 10)
-    {
-        return Enumerable.Range(1, lenght)
-            .Select(_ => GetValidUser()
-        ).ToList();
-    }
+
+    public FiapTechChalengeDbContext CreateDbContext()
+        => new FiapTechChalengeDbContext(
+            new DbContextOptionsBuilder<FiapTechChalengeDbContext>()
+                .UseInMemoryDatabase("integration-tests-db")
+                .Options
+        );
+
+
 }

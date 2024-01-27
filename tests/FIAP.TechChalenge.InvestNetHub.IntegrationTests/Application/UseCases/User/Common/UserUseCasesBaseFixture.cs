@@ -56,7 +56,8 @@ public class UserUseCasesBaseFixture
             GetValidPhone(),
             GetValidCPF(),
             GetValidDateOfBirth(),
-            GetValidRG()
+            GetValidRG(),
+            string.Empty
         );
 
     public List<DomainEntity.User> GeUsersList(int lenght = 10)

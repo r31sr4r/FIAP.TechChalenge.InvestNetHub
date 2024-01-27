@@ -7,43 +7,46 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 public class User : AggregateRoot 
 {
+    public User()
+    {
+    }
+
     public User(
         string name,
         string email,
         string phone,
         string cpf,
         DateTime dateOfBirth,
-        string? rg = null,
-        string? password = null,
+        string rg, 
+        string? password, 
         bool isActive = true
-    ) : base() 
+    ) : base()
     {
         Name = name;
         Email = email;
         Phone = phone;
-        IsActive = isActive;
-        CreatedAt = DateTime.Now;
         CPF = cpf;
         RG = rg;
         DateOfBirth = dateOfBirth;
-        Password = password;
-
-        Password = !string.IsNullOrWhiteSpace(password) 
-            ? PasswordHasher.HashPassword(password) 
+        Password = password != string.Empty
+            ? PasswordHasher.HashPassword(password!)
             : null;
+        IsActive = isActive;
 
-        Validate(); 
+        CreatedAt = DateTime.Now;
+        Validate();
     }
 
+    // Propriedades da classe
     public string Name { get; private set; }
     public string Email { get; private set; }
     public string Phone { get; private set; }
+    public string CPF { get; private set; }
+    public string RG { get; private set; } // Garanta que não seja nullable se o construtor não aceitar null
+    public DateTime DateOfBirth { get; private set; }
+    public string? Password { get; private set; } // Mesma coisa aqui
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public string CPF { get; private set; }
-    public string? RG { get; private set; }
-    public DateTime DateOfBirth { get; private set; }
-    public string? Password { get; private set; }
 
     public void Update(string name, string email, string phone, string cpf, DateTime dateOfBirth, string? rg = null)
     {

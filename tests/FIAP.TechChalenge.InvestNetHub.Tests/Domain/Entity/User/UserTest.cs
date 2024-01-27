@@ -139,7 +139,8 @@ public class UserTest
             Phone = "(12) 34567-8910",
             CPF = "07677240038",
             RG = "123456789",
-            DateOfBirth = new DateTime(1990, 1, 1)
+            DateOfBirth = new DateTime(1990, 1, 1),
+            Password = "TestPassword123!"
         };
 
         Action action = () => new DomainEntity.User(
@@ -148,7 +149,8 @@ public class UserTest
             data.Phone,
             data.CPF,
             data.DateOfBirth,
-            data.RG
+            data.RG,
+            data.Password
             );
 
         action.Should()
@@ -170,7 +172,8 @@ public class UserTest
             Phone = "(12) 34567-8910",
             CPF = cpf,
             RG = "123456789",
-            DateOfBirth = new DateTime(1990, 1, 1)
+            DateOfBirth = new DateTime(1990, 1, 1),
+            Password = "TestPassword123!"
         };
 
         Action action = () => new DomainEntity.User(
@@ -179,7 +182,8 @@ public class UserTest
             data.Phone,
             data.CPF!,
             data.DateOfBirth,
-            data.RG
+            data.RG,
+            data.Password
             );
 
         action.Should()
@@ -194,7 +198,15 @@ public class UserTest
     public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName)
     {
         Action action =
-            () => new DomainEntity.User(invalidName, "test@mail.com", "(12) 34567-8910", "07677240038", new DateTime(1990, 1, 1), "123456789");
+            () => new DomainEntity.User(
+                invalidName, 
+                "test@mail.com", 
+                "(12) 34567-8910", 
+                "07677240038", 
+                new DateTime(1990, 1, 1), 
+                "123456789",
+                "TestPassword123!"
+                );
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -208,7 +220,7 @@ public class UserTest
         var invalidName = new string('a', 256);
 
         Action action =
-                () => new DomainEntity.User(invalidName, "test@mail.com", "(12) 34567-8910", "07677240038", new DateTime(1990, 1, 1), "123456789");
+                () => new DomainEntity.User(invalidName, "test@mail.com", "(12) 34567-8910", "07677240038", new DateTime(1990, 1, 1), "123456789", "TestPassword123!");
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -223,7 +235,7 @@ public class UserTest
     public void InstantiateErrorWhenEmailIsInvalid(string invalidEmail)
     {
         Action action =
-            () => new DomainEntity.User("Valid Name", invalidEmail, "(12) 34567-8910", "07677240038", new DateTime(1990, 1, 1), "123456789");
+            () => new DomainEntity.User("Valid Name", invalidEmail, "(12) 34567-8910", "07677240038", new DateTime(1990, 1, 1), "123456789", "TestPassword123!");
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -238,7 +250,7 @@ public class UserTest
     public void InstantiateErrorWhenPhoneIsInvalid(string invalidPhone)
     {
         Action action =
-            () => new DomainEntity.User("Valid Name", "valid@email.com", phone: invalidPhone, "07677240038", new DateTime(1990, 1, 1), "123456789");
+            () => new DomainEntity.User("Valid Name", "valid@email.com", phone: invalidPhone, "07677240038", new DateTime(1990, 1, 1), "123456789", "TestPassword123!");
 
         action.Should()
             .Throw<EntityValidationException>()
@@ -252,7 +264,7 @@ public class UserTest
     public void InstantiateErrorWhenCPFIsInvalid(string invalidCPF)
     {
         Action action =
-            () => new DomainEntity.User("Valid Name", "valid@email.com", "(12) 34567-8910", invalidCPF, new DateTime(1990, 1, 1), "123456789");
+            () => new DomainEntity.User("Valid Name", "valid@email.com", "(12) 34567-8910", invalidCPF, new DateTime(1990, 1, 1), "123456789", "TestPassword123!");
 
         action.Should()
             .Throw<EntityValidationException>()
