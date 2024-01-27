@@ -103,22 +103,4 @@ public class UserRepositoryTestFixture
         return orderedEnumerable.ToList();
     }
 
-
-    public FiapTechChalengeDbContext CreateDbContext(bool preserveData = false)
-    {
-        var context = new FiapTechChalengeDbContext(
-            new DbContextOptionsBuilder<FiapTechChalengeDbContext>()
-                .UseInMemoryDatabase("integration-tests-db")
-                .Options
-        );
-
-        if (!preserveData)
-            context.Database.EnsureDeleted();
-
-        return context;
-
-    }
-        
-
-
 }
