@@ -70,12 +70,17 @@ public class UserRepository
             ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
             ("createdAt", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
             ("createdAt", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => throw new NotImplementedException()
+            _ => query.OrderBy(x => x.Name)
         };
 
-    public Task<User> GetByEmail(string email, CancellationToken cancellationToken)
+    public async Task<User> GetByEmail(string email, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await _users.AsNoTracking().FirstOrDefaultAsync(
+            x => x.Email == email,
+            cancellationToken
+        );
+        NotFoundException.ThrowIfNull(user, $"User with email {email} not found");
+        return user!;
     }
 
     public Task<IReadOnlyList<Guid>> GetIdsListByIds(List<Guid> ids, CancellationToken cancellationToken)

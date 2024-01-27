@@ -366,4 +366,34 @@ public class UserRepositoryTest
         }
 
     }
+    [Fact(DisplayName = "GetByEmail_ReturnsUser_WhenUserExists")]
+    [Trait("Integration/Infra.Data", "UserRepository - Repositories")]
+    public async Task GetByEmail_ReturnsUser_WhenUserExists()
+    {
+        FiapTechChalengeDbContext dbContext = _fixture.CreateDbContext();
+        var exampleUser = _fixture.GetExampleUser();
+        await dbContext.Users.AddAsync(exampleUser);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var userRepository = new Repository.UserRepository(dbContext);
+
+        var result = await userRepository.GetByEmail(exampleUser.Email, CancellationToken.None);
+
+        result.Should().NotBeNull();
+        result.Email.Should().Be(exampleUser.Email);
+    }
+
+    [Fact(DisplayName = "GetByEmail_ThrowsNotFoundException_WhenUserDoesNotExist")]
+    [Trait("Integration/Infra.Data", "UserRepository - Repositories")]
+    public async Task GetByEmail_ThrowsNotFoundException_WhenUserDoesNotExist()
+    {
+        FiapTechChalengeDbContext dbContext = _fixture.CreateDbContext();
+        var userRepository = new Repository.UserRepository(dbContext);
+        var nonExistingEmail = "nonexisting@example.com";
+
+        var task = async () => await userRepository.GetByEmail(nonExistingEmail, CancellationToken.None);
+        await task.Should().ThrowAsync<NotFoundException>()
+            .WithMessage($"User with email {nonExistingEmail} not found");
+    }
+
+
 }
