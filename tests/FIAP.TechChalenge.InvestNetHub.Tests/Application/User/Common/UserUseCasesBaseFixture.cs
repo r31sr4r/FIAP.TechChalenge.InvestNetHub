@@ -48,7 +48,7 @@ public class UserUseCasesBaseFixture
     public string GetValidPassword()
         => "ValidPassword123!";
 
-    public bool getRandomBoolean()
+    public bool GetRandomBoolean()
     => new Random().NextDouble() < 0.5;
 
     public DomainEntity.User GetValidUser()
