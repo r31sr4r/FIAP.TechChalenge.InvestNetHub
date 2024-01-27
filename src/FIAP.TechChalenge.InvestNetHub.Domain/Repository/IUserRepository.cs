@@ -8,7 +8,10 @@ public interface IUserRepository
     ISearchableRepository<User>
 {
     public Task<IReadOnlyList<Guid>> GetIdsListByIds(
-    List<Guid> ids,
-    CancellationToken cancellationToken
-);
+        List<Guid> ids,
+        CancellationToken cancellationToken
+    );
+
+    Task<User> GetByEmail(string email, CancellationToken cancellationToken);
+
 }

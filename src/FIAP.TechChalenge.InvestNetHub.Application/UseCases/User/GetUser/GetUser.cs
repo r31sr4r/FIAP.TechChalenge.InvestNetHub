@@ -16,8 +16,8 @@ public class GetUser : IGetUser
         CancellationToken cancellationToken
         )
     {
-        var category = await _repository.Get(request.Id, cancellationToken);
-        return UserModelOutput.FromUser(category);
+        var user = await _repository.Get(request.Id, cancellationToken);
+        return UserModelOutput.FromUser(user);
 
     }
 }
