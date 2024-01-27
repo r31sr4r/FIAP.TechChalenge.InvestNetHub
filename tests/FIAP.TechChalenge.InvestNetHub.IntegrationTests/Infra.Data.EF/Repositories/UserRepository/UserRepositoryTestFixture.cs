@@ -1,5 +1,6 @@
 ﻿using Bogus.Extensions.Brazil;
 using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
 using FIAP.TechChalenge.InvestNetHub.IntegrationTests.Base;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,8 @@ public class UserRepositoryTestFixture
     : BaseFixture
 {
     public string GetValidUserName()
-    {
-        var userName = "";
-        while (userName.Length < 3)
-            userName = Faker.Person.FullName;
-        if (userName.Length > 255)
-            userName = userName[..255];
-        return userName;
-    }
+        => Faker.Internet.UserName();
+
 
     public string GetValidEmail()
         => Faker.Internet.Email();
@@ -78,13 +73,52 @@ public class UserRepositoryTestFixture
             string.Empty
         );
 
+    public List<User> GetExampleUsersListWithNames(List<string> names)
+        => names.Select(name => new User(
+            name,
+            GetValidEmail(),
+            GetValidPhone(),
+            GetValidCPF(),
+            GetValidDateOfBirth(),
+            GetValidRG(),
+            GetValidPassword()
+        )).ToList();
 
-    public FiapTechChalengeDbContext CreateDbContext()
-        => new FiapTechChalengeDbContext(
+    public List<User> SortList(
+        List<User> usersList,  
+        string orderBy, 
+        SearchOrder order
+    )
+    {
+        var listClone = new List<User>(usersList);
+        var orderedEnumerable = (orderBy, order) switch
+        {
+            ("name", SearchOrder.Asc) => listClone.OrderBy(x => x.Name).ToList(),
+            ("name", SearchOrder.Desc) => listClone.OrderByDescending(x => x.Name).ToList(),
+            ("createdAt", SearchOrder.Asc) => listClone.OrderBy(x => x.CreatedAt).ToList(),
+            ("createdAt", SearchOrder.Desc) => listClone.OrderByDescending(x => x.CreatedAt).ToList(),
+            _ => listClone.OrderBy(x => x.Name).ToList(),
+        };
+
+        return orderedEnumerable.ToList();
+    }
+
+
+    public FiapTechChalengeDbContext CreateDbContext(bool preserveData = false)
+    {
+        var context = new FiapTechChalengeDbContext(
             new DbContextOptionsBuilder<FiapTechChalengeDbContext>()
                 .UseInMemoryDatabase("integration-tests-db")
                 .Options
         );
+
+        if (!preserveData)
+            context.Database.EnsureDeleted();
+
+        return context;
+
+    }
+        
 
 
 }
