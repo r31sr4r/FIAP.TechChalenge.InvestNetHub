@@ -68,7 +68,27 @@ public class ValidationHelper
     public static bool IsValidPhone(string phone)
     {
         var regex = new Regex(@"^\(\d{2}\) \d{4,5}-\d{4}$");
-        return regex.IsMatch(phone);
+        return regex.IsMatch(phone.Trim());
+    }
+
+    public static bool IsValidPassword(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password))
+            return false;
+
+        // Definindo os critérios para uma senha forte
+        var hasMinimumLength = new Regex(@".{8,}"); // Pelo menos 8 caracteres
+        var hasNumber = new Regex(@"[0-9]+"); // Pelo menos um número
+        var hasUpperChar = new Regex(@"[A-Z]+"); // Pelo menos uma letra maiúscula
+        var hasLowerChar = new Regex(@"[a-z]+"); // Pelo menos uma letra minúscula
+        var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]"); // Pelo menos um símbolo especial
+
+        // Validando a senha de acordo com os critérios definidos
+        return hasMinimumLength.IsMatch(password) &&
+               hasNumber.IsMatch(password) &&
+               hasUpperChar.IsMatch(password) &&
+               hasLowerChar.IsMatch(password) &&
+               hasSymbols.IsMatch(password);
     }
 
 }

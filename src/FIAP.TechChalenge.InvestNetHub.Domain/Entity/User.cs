@@ -1,8 +1,10 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
+﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
+using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
 using FIAP.TechChalenge.InvestNetHub.Domain.Validation;
 
-namespace Athenas.Pharma.Stock.Domain.Entity.PersonDomain;
+namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+
 public class User : AggregateRoot 
 {
     public User(
@@ -11,8 +13,8 @@ public class User : AggregateRoot
         string phone,
         string cpf,
         DateTime dateOfBirth,
-        string password, 
         string? rg = null,
+        string? password = null,
         bool isActive = true
     ) : base() 
     {
@@ -26,6 +28,10 @@ public class User : AggregateRoot
         DateOfBirth = dateOfBirth;
         Password = password;
 
+        Password = !string.IsNullOrWhiteSpace(password) 
+            ? PasswordHasher.HashPassword(password) 
+            : null;
+
         Validate(); 
     }
 
@@ -37,9 +43,9 @@ public class User : AggregateRoot
     public string CPF { get; private set; }
     public string? RG { get; private set; }
     public DateTime DateOfBirth { get; private set; }
-    public string Password { get; private set; }
+    public string? Password { get; private set; }
 
-    public void Update(string name, string email, string phone, string cpf, DateTime dateOfBirth, string password, string? rg = null)
+    public void Update(string name, string email, string phone, string cpf, DateTime dateOfBirth, string? rg = null)
     {
         Name = name;
         Email = email;
@@ -47,32 +53,37 @@ public class User : AggregateRoot
         CPF = cpf;
         RG = rg;
         DateOfBirth = dateOfBirth;
-        Password = password; // Atualizando senha
-        Validate(); // Validação após atualização
+        Validate(); 
     }
 
-    // Método de validação que inclui todas as validações de Person e User
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
-        if (Name.Length < 3)
-            throw new EntityValidationException($"{nameof(Name)} should be greater than 2 characters");
+        if (Name.Length <= 3)
+            throw new EntityValidationException($"{nameof(Name)} should be greater than 3 characters");
+        if (Name.Length >= 255)
+            throw new EntityValidationException($"{nameof(Name)} should be less than 255 characters");
         if (string.IsNullOrWhiteSpace(Email))
             throw new EntityValidationException($"{nameof(Email)} should not be empty or null");
         if (!ValidationHelper.IsValidEmail(Email))
             throw new EntityValidationException($"{nameof(Email)} is not in a valid format");
-        if (string.IsNullOrWhiteSpace(Phone))
-            throw new EntityValidationException($"{nameof(Phone)} should not be empty or null");
-        if (!ValidationHelper.IsValidPhone(Phone))
-            throw new EntityValidationException($"{nameof(Phone)} is not in a valid format");
         if (string.IsNullOrWhiteSpace(CPF))
             throw new EntityValidationException($"{nameof(CPF)} should not be empty or null");
         if (!ValidationHelper.IsCpfValid(CPF))
             throw new EntityValidationException($"{nameof(CPF)} is not valid");
-        if (string.IsNullOrWhiteSpace(Password))
-            throw new EntityValidationException($"{nameof(Password)} should not be empty or null");
-        // Considerar adicionar validações de complexidade da senha
+        if (string.IsNullOrWhiteSpace(Phone))
+            throw new EntityValidationException($"{nameof(Phone)} should not be empty or null");
+        if (!ValidationHelper.IsValidPhone(Phone))
+            throw new EntityValidationException($"{nameof(Phone)} is not in a valid format");
+        if (!string.IsNullOrEmpty(Password))
+            ValidatePassword();
+    }
+
+    private void ValidatePassword()
+    {
+        if (!ValidationHelper.IsValidPassword(Password!))
+            throw new EntityValidationException($"{nameof(Password)} does not meet complexity requirements");
     }
 
     public void Activate()
@@ -85,5 +96,20 @@ public class User : AggregateRoot
     {
         IsActive = false;
         Validate();
+    }
+
+    public void UpdatePassword(string currentPassword, string newPassword)
+    {
+        if (!PasswordHasher.VerifyPasswordHash(currentPassword, this.Password))
+        {
+            throw new EntityValidationException("Current password is not valid");
+        }
+
+        if (!ValidationHelper.IsValidPassword(newPassword))
+        {
+            throw new EntityValidationException("New password does not meet complexity requirements");
+        }
+
+        this.Password = PasswordHasher.HashPassword(newPassword);
     }
 }

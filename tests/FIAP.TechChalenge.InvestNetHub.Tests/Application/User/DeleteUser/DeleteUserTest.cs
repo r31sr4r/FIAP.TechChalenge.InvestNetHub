@@ -1,0 +1,93 @@
+﻿using FIAP.TechChalenge.InvestNetHub.Application.Exceptions;
+using FluentAssertions;
+using Moq;
+using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.DeleteUser;
+
+namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.User.DeleteUser;
+[Collection(nameof(DeleteUserTestFixture))]
+public class DeleteUserTest
+{
+    private readonly DeleteUserTestFixture _fixture;
+
+    public DeleteUserTest(DeleteUserTestFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
+    [Fact(DisplayName = nameof(DeleteUser))]
+    [Trait("Application", "DeleteUser - Use Cases")]
+    public async Task DeleteUser()
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var categoryExample = _fixture.GetValidUser();
+        repositoryMock.Setup(repository => repository.Get(
+                    categoryExample.Id,
+                    It.IsAny<CancellationToken>())
+        ).ReturnsAsync(categoryExample);
+        var input = new UseCases.DeleteUserInput(categoryExample.Id);
+        var useCase = new UseCases.DeleteUser
+            (repositoryMock.Object,
+            unitOfWorkMock.Object
+        );
+
+        await useCase.Handle(input, CancellationToken.None);
+
+        repositoryMock.Verify(
+            repository => repository.Get(
+                categoryExample.Id,
+                It.IsAny<CancellationToken>()
+            ), Times.Once
+        );
+
+        repositoryMock.Verify(
+            repository => repository.Delete(
+                categoryExample,
+                It.IsAny<CancellationToken>()
+            ), Times.Once
+        );
+
+        unitOfWorkMock.Verify(
+            unitOfWork => unitOfWork.Commit(
+                It.IsAny<CancellationToken>()
+            ), Times.Once
+        );
+
+
+
+
+    }
+
+    [Fact(DisplayName = nameof(ThrowWhenUserNotFound))]
+    [Trait("Application", "DeleteUser - Use Cases")]
+    public async Task ThrowWhenUserNotFound()
+    {
+        var repositoryMock = _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+        var categoryGuid = Guid.NewGuid();
+        repositoryMock.Setup(repository => repository.Get(
+                    categoryGuid,
+                    It.IsAny<CancellationToken>())
+        ).ThrowsAsync(
+            new NotFoundException($"User '{categoryGuid}' not found")
+        );
+        var input = new UseCases.DeleteUserInput(categoryGuid);
+        var useCase = new UseCases.DeleteUser
+            (repositoryMock.Object,
+            unitOfWorkMock.Object
+        );
+
+        var task = async ()
+            => await useCase.Handle(input, CancellationToken.None);
+
+        await task.Should().ThrowAsync<NotFoundException>();
+
+        repositoryMock.Verify(
+            repository => repository.Get(
+                categoryGuid,
+                It.IsAny<CancellationToken>()
+            ), Times.Once
+        );
+    }
+}
+
