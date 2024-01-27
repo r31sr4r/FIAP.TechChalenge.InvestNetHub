@@ -21,7 +21,13 @@ public class UserUseCasesBaseFixture
         => Faker.Internet.Email();
 
     public string GetValidPhone()
-        => Faker.Phone.PhoneNumber();
+    {
+        var phoneNumber = Faker.Random.Bool()
+            ? Faker.Phone.PhoneNumber("(##) ####-####")
+            : Faker.Phone.PhoneNumber("(##) #####-####");
+
+        return phoneNumber;
+    }
 
     public string GetValidCPF()
         => Faker.Person.Cpf();
@@ -35,7 +41,7 @@ public class UserUseCasesBaseFixture
     public string GetValidPassword()
         => "ValidPassword123!";
 
-    public bool getRandomBoolean()
+    public bool GetRandomBoolean()
     => new Random().NextDouble() < 0.5;
 
     public DomainEntity.User GetValidUser()

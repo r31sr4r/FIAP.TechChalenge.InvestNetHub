@@ -25,6 +25,20 @@ public class CreateUserTestFixture
         );
     }
 
+    public CreateUserInput GetInputWithPassword()
+    {
+        var user = GetValidUser();
+        return new CreateUserInput(
+            user.Name,
+            user.Email,
+            user.Phone,
+            user.CPF,
+            user.DateOfBirth,
+            user.RG,
+            user.Password
+        );
+    }
+
 
     public CreateUserInput GetInputWithInvalidEmail()
     {
