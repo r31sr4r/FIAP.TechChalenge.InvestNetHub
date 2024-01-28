@@ -20,12 +20,13 @@ public class DeleteUserTest
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
-        var categoryExample = _fixture.GetValidUser();
+        var userExample = _fixture.GetValidUser();
+
         repositoryMock.Setup(repository => repository.Get(
-                    categoryExample.Id,
+                    userExample.Id,
                     It.IsAny<CancellationToken>())
-        ).ReturnsAsync(categoryExample);
-        var input = new UseCases.DeleteUserInput(categoryExample.Id);
+        ).ReturnsAsync(userExample);
+        var input = new UseCases.DeleteUserInput(userExample.Id);
         var useCase = new UseCases.DeleteUser
             (repositoryMock.Object,
             unitOfWorkMock.Object
@@ -35,14 +36,14 @@ public class DeleteUserTest
 
         repositoryMock.Verify(
             repository => repository.Get(
-                categoryExample.Id,
+                userExample.Id,
                 It.IsAny<CancellationToken>()
             ), Times.Once
         );
 
         repositoryMock.Verify(
             repository => repository.Delete(
-                categoryExample,
+                userExample,
                 It.IsAny<CancellationToken>()
             ), Times.Once
         );
@@ -52,10 +53,6 @@ public class DeleteUserTest
                 It.IsAny<CancellationToken>()
             ), Times.Once
         );
-
-
-
-
     }
 
     [Fact(DisplayName = nameof(ThrowWhenUserNotFound))]

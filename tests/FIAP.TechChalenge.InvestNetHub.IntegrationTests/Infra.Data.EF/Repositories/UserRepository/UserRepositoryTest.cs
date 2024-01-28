@@ -364,8 +364,8 @@ public class UserRepositoryTest
             outputItem.RG.Should().Be(exampleItem.RG);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
         }
-
     }
+
     [Fact(DisplayName = "GetByEmail_ReturnsUser_WhenUserExists")]
     [Trait("Integration/Infra.Data", "UserRepository - Repositories")]
     public async Task GetByEmail_ReturnsUser_WhenUserExists()
