@@ -1,9 +1,8 @@
-﻿using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
-using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
-using Moq;
-using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
+﻿using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Interfaces;
+using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Models;
 using FluentAssertions;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
+using Moq;
+using UseCases = FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
 
 namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Application.MarketNews.ListMarketNews;
 
@@ -21,180 +20,88 @@ public class ListMarketNewsTest
     [Trait("Application", "ListMarketNews")]
     public async Task ShouldListMarketNews()
     {
-        var marketNewsList = _fixture.GetExampleMarketNewsList();
-        var repositoryMock = _fixture.GetRepositoryMock();
+        var serviceMock = new Mock<IMarketNewsService>();
         var input = _fixture.GetExampleInput();
 
-        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
-                currentPage: input.Page,
-                perPage: input.PerPage,
-                items: (IReadOnlyList<DomainEntity.MarketNews>)marketNewsList,
-                total: new Random().Next(50, 200)
-        );
-
-        repositoryMock.Setup(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
+        var marketNewsDtoList = _fixture.GetExampleMarketNewsDtoList();
+        serviceMock.Setup(x => x.GetMarketNewsAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<string>(),
+            It.IsAny<int>(),
             It.IsAny<CancellationToken>()
-        )).ReturnsAsync(outputRepositorySearch);
+        )).ReturnsAsync(marketNewsDtoList);
 
-        var useCase = new UseCases.ListMarketNews(repositoryMock.Object);
+        var useCase = new UseCases.ListMarketNews(serviceMock.Object);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
         output.Should().NotBeNull();
-        output.Page.Should().Be(outputRepositorySearch.CurrentPage);
-        output.PerPage.Should().Be(outputRepositorySearch.PerPage);
-        output.Total.Should().Be(outputRepositorySearch.Total);
-        output.Items.Should().HaveCount(outputRepositorySearch.Items.Count);
-        ((List<MarketNewsModelOutput>)output.Items).ForEach(outputItem =>
+        output.MarketNews.Should().HaveCount(marketNewsDtoList.Count);
+
+        for (int i = 0; i < marketNewsDtoList.Count; i++)
         {
-            var repositoryMarketNews = outputRepositorySearch.Items
-                .FirstOrDefault(x => x.Id == outputItem.Id);
-            outputItem.Should().NotBeNull();
-            outputItem.Title.Should().Be(repositoryMarketNews!.Title);
-            outputItem.Summary.Should().Be(repositoryMarketNews.Summary);
-            outputItem.PublishDate.Should().Be(repositoryMarketNews.PublishDate);
-            outputItem.Url.Should().Be(repositoryMarketNews.Url);
-            outputItem.Source.Should().Be(repositoryMarketNews.Source);
-            outputItem.ImageUrl.Should().Be(repositoryMarketNews.ImageUrl);
-            outputItem.Authors.ForEach(author =>
-            {
-                repositoryMarketNews.Authors.Should().Contain(author);
-            });
-            outputItem.OverallSentimentScore.Should().Be(repositoryMarketNews.OverallSentimentScore);
-            outputItem.OverallSentimentLabel.Should().Be(repositoryMarketNews.OverallSentimentLabel);
-        });
-        repositoryMock.Verify(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
+            var dto = marketNewsDtoList[i];
+            var outputItem = output.MarketNews.ElementAt(i);
+
+            outputItem.Title.Should().Be(dto.Title);
+            outputItem.Summary.Should().Be(dto.Summary);
+            outputItem.PublishDate.Should().Be(dto.PublishDate);
+            outputItem.Url.Should().Be(dto.Url);
+            outputItem.Source.Should().Be(dto.Source);
+            outputItem.ImageUrl.Should().Be(dto.ImageUrl);
+            outputItem.Authors.Should().BeEquivalentTo(dto.Authors);
+            outputItem.OverallSentimentScore.Should().Be(dto.OverallSentimentScore);
+            outputItem.OverallSentimentLabel.Should().Be(dto.OverallSentimentLabel);
+        }
+
+        serviceMock.Verify(x => x.GetMarketNewsAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<string>(),
+            It.IsAny<int>(),
             It.IsAny<CancellationToken>()
         ), Times.Once);
     }
 
-    [Theory(DisplayName = nameof(ShouldListMarketNewsWithoutAllParameters))]
+    [Fact(DisplayName = nameof(ShouldReturnEmptyListWhenNoData))]
     [Trait("Application", "ListMarketNews")]
-    [MemberData(
-        nameof(ListMarketNewsTestDataGenerator.GetInputWithoutAllParameters),
-        parameters: 15,
-        MemberType = typeof(ListMarketNewsTestDataGenerator)
-    )]
-    public async Task ShouldListMarketNewsWithoutAllParameters(UseCases.ListMarketNewsInput input)
+    public async Task ShouldReturnEmptyListWhenNoData()
     {
-        var marketNewsList = _fixture.GetExampleMarketNewsList();
-        var repositoryMock = _fixture.GetRepositoryMock();
-
-        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
-                currentPage: input.Page,
-                perPage: input.PerPage,
-                items: (IReadOnlyList<DomainEntity.MarketNews>)marketNewsList,
-                total: new Random().Next(50, 200)
-        );
-
-        repositoryMock.Setup(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
-            It.IsAny<CancellationToken>()
-        )).ReturnsAsync(outputRepositorySearch);
-
-        var useCase = new UseCases.ListMarketNews(repositoryMock.Object);
-
-        var output = await useCase.Handle(input, CancellationToken.None);
-
-        output.Should().NotBeNull();
-        output.Page.Should().Be(outputRepositorySearch.CurrentPage);
-        output.PerPage.Should().Be(outputRepositorySearch.PerPage);
-        output.Total.Should().Be(outputRepositorySearch.Total);
-        output.Items.Should().HaveCount(outputRepositorySearch.Items.Count);
-        ((List<MarketNewsModelOutput>)output.Items).ForEach(outputItem =>
-        {
-            var repositoryMarketNews = outputRepositorySearch.Items
-                .FirstOrDefault(x => x.Id == outputItem.Id);
-            outputItem.Should().NotBeNull();
-            outputItem.Title.Should().Be(repositoryMarketNews!.Title);
-            outputItem.Summary.Should().Be(repositoryMarketNews.Summary);
-            outputItem.PublishDate.Should().Be(repositoryMarketNews.PublishDate);
-            outputItem.Url.Should().Be(repositoryMarketNews.Url);
-            outputItem.Source.Should().Be(repositoryMarketNews.Source);
-            outputItem.ImageUrl.Should().Be(repositoryMarketNews.ImageUrl);
-            outputItem.Authors.ForEach(author =>
-            {
-                repositoryMarketNews.Authors.Should().Contain(author);
-            });
-            outputItem.OverallSentimentScore.Should().Be(repositoryMarketNews.OverallSentimentScore);
-            outputItem.OverallSentimentLabel.Should().Be(repositoryMarketNews.OverallSentimentLabel);
-        });
-        repositoryMock.Verify(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
-            It.IsAny<CancellationToken>()
-        ), Times.Once);
-    }
-
-    [Fact(DisplayName = nameof(ShouldRetunsEmptyList))]
-    [Trait("Application", "ListMarketNews")]
-    public async Task ShouldRetunsEmptyList()
-    {
-        var repositoryMock = _fixture.GetRepositoryMock();
+        var serviceMock = new Mock<IMarketNewsService>();
         var input = _fixture.GetExampleInput();
 
-        var outputRepositorySearch = new SearchOutput<DomainEntity.MarketNews>(
-                currentPage: input.Page,
-                perPage: input.PerPage,
-                items: new List<DomainEntity.MarketNews>().AsReadOnly(),
-                total: 0
-        );
-
-        repositoryMock.Setup(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
+        serviceMock.Setup(x => x.GetMarketNewsAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<string>(),
+            It.IsAny<int>(),
             It.IsAny<CancellationToken>()
-        )).ReturnsAsync(outputRepositorySearch);
+        )).ReturnsAsync(new List<MarketNewsDto>());
 
-        var useCase = new UseCases.ListMarketNews(repositoryMock.Object);
+        var useCase = new UseCases.ListMarketNews(serviceMock.Object);
 
-        var output = await useCase.Handle(input, CancellationToken.None);
+        var output = await useCase.Handle(input, cancellationToken: CancellationToken.None);
 
         output.Should().NotBeNull();
-        output.Page.Should().Be(outputRepositorySearch.CurrentPage);
-        output.PerPage.Should().Be(outputRepositorySearch.PerPage);
-        output.Total.Should().Be(0);
-        output.Items.Should().HaveCount(0);
+        output.MarketNews.Should().BeEmpty();
 
-        repositoryMock.Verify(x => x.Search(
-            It.Is<SearchInput>(
-                searchInput => searchInput.Page == input.Page
-                && searchInput.PerPage == input.PerPage
-                && searchInput.Search == input.Search
-                && searchInput.OrderBy == input.Sort
-                && searchInput.Order == input.Dir
-            ),
+        serviceMock.Verify(x => x.GetMarketNewsAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<DateTime?>(),
+            It.IsAny<string>(),
+            It.IsAny<int>(),
             It.IsAny<CancellationToken>()
         ), Times.Once);
     }
+
+
 }

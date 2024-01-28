@@ -2,9 +2,6 @@
 using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Interfaces;
 using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Models;
 using Newtonsoft.Json;
-using System.Globalization;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.AlphaVantage
 {
@@ -26,11 +23,12 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.AlphaVantage
             DateTime? fromTime,
             DateTime? toTime,
             string sort = "LATEST",
-            int limit = 50)
+            int limit = 50,
+            CancellationToken cancellationToken = default)
         {
             var url = BuildApiUrl(tickers, topics, fromTime, toTime, sort, limit);
 
-            var response = await Client.GetAsync(url);
+            var response = await Client.GetAsync(url, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();

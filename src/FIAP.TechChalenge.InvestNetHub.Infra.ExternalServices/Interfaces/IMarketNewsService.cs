@@ -10,6 +10,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Interfaces
             DateTime? fromTime, 
             DateTime? toTime, 
             string sort = "LATEST",
-            int limit = 50);
+            int limit = 50,
+            CancellationToken cancellationToken = default);
     }
 }

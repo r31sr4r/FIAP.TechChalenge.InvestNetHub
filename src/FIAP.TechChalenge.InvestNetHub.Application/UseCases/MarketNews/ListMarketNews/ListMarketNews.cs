@@ -1,37 +1,36 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
+using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Interfaces;
+using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Models;
 
 namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
-public class ListMarketNews
-    : IListMarketNews
+public class ListMarketNews : IListMarketNews
 {
-    private readonly IMarketNewsRepository _marketNewsRepository;
+    private readonly IMarketNewsService _marketNewsService;
 
-    public ListMarketNews(IMarketNewsRepository marketNewsRepository) 
-        => _marketNewsRepository = marketNewsRepository;
+    public ListMarketNews(IMarketNewsService marketNewsService)
+    {
+        _marketNewsService = marketNewsService;
+    }
 
     public async Task<ListMarketNewsOutput> Handle(
-        ListMarketNewsInput request, 
+        ListMarketNewsInput request,
         CancellationToken cancellationToken)
     {
-        var seachOutput = await _marketNewsRepository.Search(
-            new (
-                request.Page,
-                request.PerPage,
-                request.Search,
-                request.Sort,
-                request.Dir
-            ),
+        var marketNews = await _marketNewsService.GetMarketNewsAsync(
+            request.Tickers,
+            request.Topics,
+            request.FromTime,
+            request.ToTime,
+            request.Sort,
+            request.Limit,
             cancellationToken
         );
 
-        return new ListMarketNewsOutput(
-            seachOutput.CurrentPage,
-            seachOutput.PerPage,
-            seachOutput.Total,
-            seachOutput.Items
-                .Select(MarketNewsModelOutput.FromMarketNews)
-                .ToList()
-        );
+        var marketNewsOutputList = marketNews
+            .Select(MarketNewsModelOutput.FromDto)
+            .ToList();
+
+        return new ListMarketNewsOutput(marketNewsOutputList);
     }
 }

@@ -1,4 +1,5 @@
-﻿using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
+﻿using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Models;
+using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
 public class MarketNewsModelOutput
@@ -52,6 +53,22 @@ public class MarketNewsModelOutput
             marketNews.OverallSentimentScore,
             marketNews.OverallSentimentLabel
             );
+    }
+
+    public static MarketNewsModelOutput FromDto(MarketNewsDto dto)
+    {
+        return new MarketNewsModelOutput(
+            Guid.NewGuid(),
+            dto.Title,
+            dto.Summary,
+            dto.PublishDate,
+            dto.Url,
+            dto.Source,
+            dto.ImageUrl,
+            dto.Authors,
+            dto.OverallSentimentScore,
+            dto.OverallSentimentLabel
+        );
     }
 
 }
