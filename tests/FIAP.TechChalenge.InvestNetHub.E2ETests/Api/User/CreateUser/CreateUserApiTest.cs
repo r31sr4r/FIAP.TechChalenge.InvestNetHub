@@ -1,4 +1,5 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
+﻿using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.CreateUser;
 
 [Collection(nameof(CreateUserApiTestFixture))]
 public class CreateUserApiTest
+    : IDisposable
 {
     private readonly CreateUserApiTestFixture _fixture;
 
@@ -23,26 +25,26 @@ public class CreateUserApiTest
 
         var (response, output) = await _fixture
             .ApiClient
-            .Post<UserModelOutput>(
+            .Post<ApiResponse<UserModelOutput>>(
                 "/users", 
                 input
             );
 
         response.Should().NotBeNull();
         response!.StatusCode.Should().Be(HttpStatusCode.Created);
-        output.Should().NotBeNull();
-        output!.Name.Should().Be(input.Name);
-        output.Email.Should().Be(input.Email);
-        output.Phone.Should().Be(input.Phone);
-        output.CPF.Should().Be(input.CPF);
-        output.DateOfBirth.Should().Be(input.DateOfBirth);
-        output.RG.Should().Be(input.RG);
-        output.IsActive.Should().Be(input.IsActive);
-        output.Id.Should().NotBeEmpty();
-        output.CreatedAt.Should().NotBeSameDateAs(default);
+        output!.Data.Should().NotBeNull();
+        output.Data.Name.Should().Be(input.Name);
+        output.Data.Email.Should().Be(input.Email);
+        output.Data.Phone.Should().Be(input.Phone);
+        output.Data.CPF.Should().Be(input.CPF);
+        output.Data.DateOfBirth.Should().Be(input.DateOfBirth);
+        output.Data.RG.Should().Be(input.RG);
+        output.Data.IsActive.Should().Be(input.IsActive);
+        output.Data.Id.Should().NotBeEmpty();
+        output.Data.CreatedAt.Should().NotBeSameDateAs(default);
 
         var dbUser = await _fixture.Persistence
-            .GetById(output.Id);
+            .GetById(output.Data.Id);
         dbUser.Should().NotBeNull();
         dbUser!.Name.Should().Be(input.Name);
         dbUser.Email.Should().Be(input.Email);
@@ -81,4 +83,6 @@ public class CreateUserApiTest
         output.Detail.Should().Be(expectedDetail);
     }
 
+    public void Dispose()
+        => _fixture.CleanPersistence();
 }

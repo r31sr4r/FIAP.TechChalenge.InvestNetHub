@@ -1,9 +1,12 @@
+using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.User;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.DeleteUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.GetUser;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.ListUsers;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,8 +39,8 @@ public class UsersController : ControllerBase
         var result = await _mediator.Send(input, cancellationToken);
         return CreatedAtAction(
             nameof(Create), 
-            new { result.Id}, 
-            result
+            new { result.Id},
+            new ApiResponse<UserModelOutput>(result)
         );
     }
 
@@ -54,7 +57,7 @@ public class UsersController : ControllerBase
             cancellationToken
         );
 
-        return Ok(result);
+        return Ok(new ApiResponse<UserModelOutput>(result));
     }
 
     [HttpDelete("{id:guid}")]
@@ -95,6 +98,34 @@ public class UsersController : ControllerBase
             apiInput.IsActive
         );
         var result = await _mediator.Send(input, cancellationToken);
-        return Ok(result);
+        return Ok(new ApiResponse<UserModelOutput>(result));
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(ListUsersOutput), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List(
+        CancellationToken cancellation,
+        [FromQuery] int? page = null,
+        [FromQuery] int? perPage = null,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sort = null,
+        [FromQuery] SearchOrder? dir = null
+    )
+    {
+        var input = new ListUsersInput();
+        if (page.HasValue)
+            input.Page = page.Value;
+        if (perPage.HasValue)
+            input.PerPage = perPage.Value;
+        if (!string.IsNullOrWhiteSpace(search))
+            input.Search = search;
+        if (!string.IsNullOrWhiteSpace(sort))
+            input.Sort = sort;
+        if (dir.HasValue)
+            input.Dir = dir.Value;
+
+        var output = await _mediator.Send(input, cancellation);
+
+        return Ok(new ApiResponseList<UserModelOutput>(output));
     }
 }

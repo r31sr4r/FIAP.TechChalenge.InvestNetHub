@@ -7,6 +7,7 @@ namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.DeleteUser;
 
 [Collection(nameof(DeleteUserApiTestFixture))]
 public class DeleteUserApiTest
+    : IDisposable
 {
     private readonly DeleteUserApiTestFixture _fixture;
 
@@ -54,4 +55,7 @@ public class DeleteUserApiTest
         output.Detail.Should().Be($"User with id {randomGuid} not found");
         output.Type.Should().Be("NotFound");
     }
+
+    public void Dispose()
+    => _fixture.CleanPersistence();
 }

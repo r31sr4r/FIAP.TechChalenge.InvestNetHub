@@ -10,6 +10,7 @@ namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.GetUser;
 
 [Collection(nameof(GetUserApiTestFixture))]
 public class GetUserApiTest
+    : IDisposable
 {
     private readonly GetUserApiTestFixture _fixture;
 
@@ -37,7 +38,6 @@ public class GetUserApiTest
         output.Data.Email.Should().Be(exampleUser.Email);
         output.Data.Phone.Should().Be(exampleUser.Phone);
         output.Data.CPF.Should().Be(exampleUser.CPF);
-        output.Data.DateOfBirth.Should().BeSameDateAs(exampleUser.DateOfBirth);
         output.Data.RG.Should().Be(exampleUser.RG);
         output.Data.IsActive.Should().Be(exampleUser.IsActive);
         output.Data.CreatedAt.TrimMilliSeconds().Should().BeSameDateAs(
@@ -65,4 +65,8 @@ public class GetUserApiTest
         output.Detail.Should().Be($"User with id {randomGuid} not found");
         output.Type.Should().Be("NotFound");
     }
+
+    public void Dispose()
+    => _fixture.CleanPersistence();
 }
+

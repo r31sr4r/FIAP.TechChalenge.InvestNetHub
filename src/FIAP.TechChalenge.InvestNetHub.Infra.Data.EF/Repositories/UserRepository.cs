@@ -64,7 +64,8 @@ public class UserRepository
         string orderProperty,
         SearchOrder order
     )
-        => (orderProperty, order) switch
+    {
+        var orderedEnumerable = (orderProperty, order) switch
         {
             ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
             ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
@@ -72,6 +73,12 @@ public class UserRepository
             ("createdAt", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
             _ => query.OrderBy(x => x.Name)
         };
+
+        return orderedEnumerable
+            .ThenBy(x => x.CreatedAt);
+
+    }
+
 
     public async Task<User> GetByEmail(string email, CancellationToken cancellationToken)
     {

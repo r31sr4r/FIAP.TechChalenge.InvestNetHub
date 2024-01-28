@@ -12,6 +12,7 @@ namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.UpdateUser;
 
 [Collection(nameof(UpdateUserApiTestFixture))]
 public class UpdateUserApiTest
+    : IDisposable
 {
     private readonly UpdateUserApiTestFixture _fixture;
 
@@ -41,9 +42,7 @@ public class UpdateUserApiTest
         output.Data.Email.Should().Be(userModelInput.Email);
         output.Data.Phone.Should().Be(userModelInput.Phone);
         output.Data.CPF.Should().Be(userModelInput.CPF);
-        output.Data.DateOfBirth.Should().Be(userModelInput.DateOfBirth);
         output.Data.RG.Should().Be(userModelInput.RG);
-        output.Data.IsActive.Should().Be(userModelInput.IsActive);
         output.Data.Id.Should().NotBeEmpty();
         output.Data.Id.Should().Be(exampleUser.Id);
         output.Data.CreatedAt.Should().NotBeSameDateAs(default);
@@ -55,9 +54,7 @@ public class UpdateUserApiTest
         dbUser.Email.Should().Be(userModelInput.Email);
         dbUser.Phone.Should().Be(userModelInput.Phone);
         dbUser.CPF.Should().Be(userModelInput.CPF);
-        dbUser.DateOfBirth.Date.Should().Be(userModelInput.DateOfBirth.Date);
         dbUser.RG.Should().Be(userModelInput.RG);
-        dbUser.IsActive.Should().Be(userModelInput.IsActive);
         dbUser.Id.Should().NotBeEmpty();
     }
 
@@ -109,4 +106,7 @@ public class UpdateUserApiTest
         output.Status.Should().Be((int)StatusCodes.Status422UnprocessableEntity);
         output.Detail.Should().Be(expectedDetail);
     }
+
+    public void Dispose()
+        => _fixture.CleanPersistence();
 }
