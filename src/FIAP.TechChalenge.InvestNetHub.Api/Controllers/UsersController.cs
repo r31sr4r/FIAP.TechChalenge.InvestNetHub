@@ -1,3 +1,4 @@
+using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.User;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.DeleteUser;
@@ -78,10 +79,21 @@ public class UsersController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> Update(
-        [FromBody] UpdateUserInput input,
+        [FromRoute] Guid id,
+        [FromBody] UpdateUserApiInput apiInput,
         CancellationToken cancellationToken
     )
     {
+        var input = new UpdateUserInput(
+            id,
+            apiInput.Name,
+            apiInput.Email,
+            apiInput.Phone,
+            apiInput.CPF,
+            apiInput.DateOfBirth,
+            apiInput.RG,
+            apiInput.IsActive
+        );
         var result = await _mediator.Send(input, cancellationToken);
         return Ok(result);
     }

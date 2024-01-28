@@ -1,9 +1,9 @@
-﻿namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.CreateUser;
+﻿namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.UpdateUser;
 public class UpdateUserApiTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs()
     {
-        var fixture = new CreateUserApiTestFixture();
+        var fixture = new UpdateUserApiTestFixture();
         var invalidInputsList = new List<object[]>();
         var totalInvalidCases = 4;
 

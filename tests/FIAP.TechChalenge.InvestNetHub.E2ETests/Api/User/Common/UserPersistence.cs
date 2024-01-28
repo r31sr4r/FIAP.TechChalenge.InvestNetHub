@@ -17,9 +17,9 @@ public class UserPersistence
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
 
-    public async Task InsertList(List<DomainEntity.User> categories)
+    public async Task InsertList(List<DomainEntity.User> users)
     {
-        await _context.Users.AddRangeAsync(categories);
+        await _context.Users.AddRangeAsync(users);
         await _context.SaveChangesAsync();
     }
 }

@@ -57,8 +57,8 @@ public class CreateUserApiTest
     [Theory(DisplayName = nameof(ErrorWhenCantInstatiateAggregate))]
     [Trait("E2E/Api", "User/Create - Endpoints")]
     [MemberData(
-        nameof(CreateUserApiTestDataGenerator.GetInvalidInputs),
-        MemberType = typeof(CreateUserApiTestDataGenerator)
+        nameof(UpdateUserApiTestDataGenerator.GetInvalidInputs),
+        MemberType = typeof(UpdateUserApiTestDataGenerator)
     )]
     public async Task ErrorWhenCantInstatiateAggregate(
         CreateUserInput input,

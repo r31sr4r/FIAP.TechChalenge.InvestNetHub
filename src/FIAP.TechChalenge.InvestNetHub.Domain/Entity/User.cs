@@ -37,14 +37,13 @@ public class User : AggregateRoot
         Validate();
     }
 
-    // Propriedades da classe
     public string Name { get; private set; }
     public string Email { get; private set; }
     public string Phone { get; private set; }
     public string CPF { get; private set; }
-    public string RG { get; private set; } // Garanta que não seja nullable se o construtor não aceitar null
+    public string RG { get; private set; } 
     public DateTime DateOfBirth { get; private set; }
-    public string? Password { get; private set; } // Mesma coisa aqui
+    public string? Password { get; private set; } 
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
