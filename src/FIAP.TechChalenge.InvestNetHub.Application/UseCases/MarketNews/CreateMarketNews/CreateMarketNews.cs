@@ -1,4 +1,5 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
@@ -16,7 +17,7 @@ public class CreateMarketNews : ICreateMarketNews
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateMarketNewsOutput> Handle(
+    public async Task<MarketNewsModelOutput> Handle(
         CreateMarketNewsInput input, 
         CancellationToken cancellationToken)
     {
@@ -35,7 +36,7 @@ public class CreateMarketNews : ICreateMarketNews
         await _marketNewsRepository.Insert(marketNews, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return CreateMarketNewsOutput.FromMarketNews(marketNews);            
+        return MarketNewsModelOutput.FromMarketNews(marketNews);            
 
     }
 }

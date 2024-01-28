@@ -1,7 +1,8 @@
-﻿using MediatR;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.Common;
+using MediatR;
 
 namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-public class CreateMarketNewsInput : IRequest<CreateMarketNewsOutput>
+public class CreateMarketNewsInput : IRequest<MarketNewsModelOutput>
 {
     public CreateMarketNewsInput(
         string title,

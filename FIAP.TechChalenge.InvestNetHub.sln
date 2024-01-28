@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices", "src\FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices\FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.csproj", "{8618229E-5047-46EB-90CB-8B3045A53FBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Infra.Data.EF", "src\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.csproj", "{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Infra.Data.EF", "src\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.csproj", "{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.E2ETests", "tests\FIAP.TechChalenge.InvestNetHub.E2ETests\FIAP.TechChalenge.InvestNetHub.E2ETests.csproj", "{77FACB43-EE50-4CDE-B4CF-D97E1943663E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Api", "src\FIAP.TechChalenge.InvestNetHub.Api\FIAP.TechChalenge.InvestNetHub.Api.csproj", "{CC3249BD-B83E-43C0-ACDB-40D30203D914}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,14 @@ Global
 		{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77FACB43-EE50-4CDE-B4CF-D97E1943663E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77FACB43-EE50-4CDE-B4CF-D97E1943663E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77FACB43-EE50-4CDE-B4CF-D97E1943663E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77FACB43-EE50-4CDE-B4CF-D97E1943663E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +72,8 @@ Global
 		{E3C540CF-51E5-49C6-AD73-0D0F138CB237} = {B4CE72DD-6728-4764-AFB9-099FA5CAF7C0}
 		{8618229E-5047-46EB-90CB-8B3045A53FBB} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
 		{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
+		{77FACB43-EE50-4CDE-B4CF-D97E1943663E} = {B4CE72DD-6728-4764-AFB9-099FA5CAF7C0}
+		{CC3249BD-B83E-43C0-ACDB-40D30203D914} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB70723-DE7F-4EF4-B7E2-9DAC4836C8CA}
