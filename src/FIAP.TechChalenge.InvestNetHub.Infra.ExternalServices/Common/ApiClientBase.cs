@@ -1,6 +1,5 @@
-﻿using System.Net.Http;
-using Microsoft.Extensions.Configuration;
-using System.IO;
+﻿using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Common
 {
@@ -14,7 +13,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Common
         protected ApiClientBase(string providerName)
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(AppContext.BaseDirectory, "Infra.ExternalServices", "Configurations"))
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("apiSettings.json", optional: false)
                 .Build();
 

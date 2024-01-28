@@ -56,7 +56,7 @@ public class AuthUserTest
             It.IsAny<string>(),
             It.IsAny<CancellationToken>()
         )).ThrowsAsync(
-            new AuthenticationException($"Invalid email or password.")
+            new CustomAuthenticationException($"Invalid email or password.")
         );
 
         var input = new UseCases.AuthUserInput("nonexistent@example.com", "Password");
@@ -64,7 +64,7 @@ public class AuthUserTest
 
         Func<Task> action = async () => await useCase.Handle(input, CancellationToken.None);
 
-        await action.Should().ThrowAsync<AuthenticationException>()
+        await action.Should().ThrowAsync<CustomAuthenticationException>()
             .WithMessage("Invalid email or password.");
 
         repositoryMock.Verify(repository => repository.GetByEmail(

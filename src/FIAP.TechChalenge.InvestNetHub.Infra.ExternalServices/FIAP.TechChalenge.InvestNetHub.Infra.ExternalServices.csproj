@@ -16,4 +16,10 @@
     <ProjectReference Include="..\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="apiSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

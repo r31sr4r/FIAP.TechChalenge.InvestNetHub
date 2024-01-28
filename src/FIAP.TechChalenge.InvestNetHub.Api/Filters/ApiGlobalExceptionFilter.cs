@@ -34,6 +34,13 @@ public class ApiGlobalExceptionFilter : IExceptionFilter
             details.Type = "NotFound";
             details.Detail = exception.Message;
         }
+        else if (exception is CustomAuthenticationException)
+        {
+            details.Title = "Authentication error";
+            details.Status = StatusCodes.Status401Unauthorized;
+            details.Type = "Unauthorized";
+            details.Detail = exception.Message;
+        }
         else
         {
             details.Title = "An error occurred while processing your request";

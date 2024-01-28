@@ -1,5 +1,7 @@
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.User;
+using FIAP.TechChalenge.InvestNetHub.Api.Common.Utilities;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.AuthUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.DeleteUser;
@@ -11,20 +13,24 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
     private readonly IMediator _mediator;
+    private readonly IJwtTokenGenerator _tokenGenerator;
 
     public UsersController(
         ILogger<UsersController> logger,
-        IMediator mediator
+        IMediator mediator,
+        IJwtTokenGenerator tokenGenerator
         )
     {
         _logger = logger;
         _mediator = mediator;
+        _tokenGenerator = tokenGenerator;
     }
 
     [HttpPost]
@@ -128,4 +134,23 @@ public class UsersController : ControllerBase
 
         return Ok(new ApiResponseList<UserModelOutput>(output));
     }
+
+    [HttpPost("authenticate")]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Authenticate(
+        [FromBody] AuthUserInput authUserInput,
+        CancellationToken cancellationToken
+    )
+    {
+        var user = await _mediator.Send(authUserInput, cancellationToken);
+        var token = _tokenGenerator.GenerateJwtToken(user);
+        var response = new AuthResponse 
+        {
+            Email = user.Email,
+            Token = token
+        };
+        return Ok(response);
+    }
+
 }
