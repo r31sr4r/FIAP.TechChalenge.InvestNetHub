@@ -38,9 +38,21 @@ public class MarketNewsController : ControllerBase
         [FromQuery] int limit = 50
     )
     {
+        _logger.LogInformation(
+            "Starting GetMarketNews with parameters:" + Environment.NewLine +
+            "Tickers={Tickers}," + Environment.NewLine +
+            "Topics={Topics}," + Environment.NewLine +
+            "FromTime={FromTime}," + Environment.NewLine +
+            "ToTime={ToTime}," + Environment.NewLine +
+            "Sort={Sort}," + Environment.NewLine +
+            "Limit={Limit}",
+            tickers, topics, fromTime, toTime, sort, limit);
+
         var input = new ListMarketNewsInput(tickers, topics, fromTime, toTime, sort, limit);
 
         var result = await _mediator.Send(input, cancellation);
+
+        _logger.LogInformation("GetMarketNews completed successfully.");
 
         return Ok(result);
     }

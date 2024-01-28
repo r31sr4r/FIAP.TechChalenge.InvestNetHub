@@ -24,7 +24,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(user => user.CPF)
             .IsRequired()
-            .HasMaxLength(11);
+            .HasMaxLength(14);
 
         builder.Property(user => user.RG)
             .HasMaxLength(20); 

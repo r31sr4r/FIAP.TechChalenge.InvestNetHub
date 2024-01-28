@@ -19,9 +19,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Infra.Data.EF", "src\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.csproj", "{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.E2ETests", "tests\FIAP.TechChalenge.InvestNetHub.E2ETests\FIAP.TechChalenge.InvestNetHub.E2ETests.csproj", "{77FACB43-EE50-4CDE-B4CF-D97E1943663E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.E2ETests", "tests\FIAP.TechChalenge.InvestNetHub.E2ETests\FIAP.TechChalenge.InvestNetHub.E2ETests.csproj", "{77FACB43-EE50-4CDE-B4CF-D97E1943663E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Api", "src\FIAP.TechChalenge.InvestNetHub.Api\FIAP.TechChalenge.InvestNetHub.Api.csproj", "{CC3249BD-B83E-43C0-ACDB-40D30203D914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIAP.TechChalenge.InvestNetHub.Api", "src\FIAP.TechChalenge.InvestNetHub.Api\FIAP.TechChalenge.InvestNetHub.Api.csproj", "{CC3249BD-B83E-43C0-ACDB-40D30203D914}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "env", "env", "{8012A8DF-14B8-4502-9B92-1D9D121A93C9}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

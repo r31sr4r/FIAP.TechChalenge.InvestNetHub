@@ -3,10 +3,12 @@ using FIAP.TechChalenge.InvestNetHub.Api.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddAppConnections()
+    .AddAppConnections(builder.Configuration)
     .AddUseCases()
     .AddSecurityServices()
     .AddAndConfigureControllers();
+
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 app.UseDocumentation();

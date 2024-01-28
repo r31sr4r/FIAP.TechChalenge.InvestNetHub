@@ -1,4 +1,4 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Api.Extensios.String;
+﻿using FIAP.TechChalenge.InvestNetHub.Api.Extensions.String;
 using System.Text.Json;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;

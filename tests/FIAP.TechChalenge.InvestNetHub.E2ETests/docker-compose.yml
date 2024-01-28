@@ -1,0 +1,13 @@
+﻿version: '3.4'
+
+services:
+  fiap.techchalenge.investnethub.db:
+    container_name: investnethubdb-e2e
+    hostname: investnethubdb-e2e
+    image: mysql
+    ports:
+      - 33060:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: C0D3fl1x.@
+
+

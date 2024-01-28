@@ -8,14 +8,20 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Filters;
 public class ApiGlobalExceptionFilter : IExceptionFilter
 {
     private readonly IHostEnvironment _env;
+    private readonly ILogger<ApiGlobalExceptionFilter> _logger;
 
-    public ApiGlobalExceptionFilter(IHostEnvironment env)
-        => _env = env;
+    public ApiGlobalExceptionFilter(IHostEnvironment env, ILogger<ApiGlobalExceptionFilter> logger)
+    {
+        _env = env;
+        _logger = logger;
+    }
 
     public void OnException(ExceptionContext context)
     {
         var details = new ProblemDetails();
         var exception = context.Exception;
+
+        _logger.LogError(exception, "An exception occurred: {ExceptionMessage}", exception.Message);
 
         if (_env.IsDevelopment())
             details.Extensions["trace"] = exception.StackTrace;
