@@ -1,4 +1,5 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Api.Filters;
+﻿using FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;
+using FIAP.TechChalenge.InvestNetHub.Api.Filters;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations;
 
@@ -8,9 +9,14 @@ public static class ControllersConfiguration
         this IServiceCollection services
     )
     {
-        services.AddControllers(
+        services
+            .AddControllers(
             options => options.Filters.Add(typeof(ApiGlobalExceptionFilter))
-        );
+            )   
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCasePolicy();
+            });
         services.AddDocumentation();
         return services;
     }

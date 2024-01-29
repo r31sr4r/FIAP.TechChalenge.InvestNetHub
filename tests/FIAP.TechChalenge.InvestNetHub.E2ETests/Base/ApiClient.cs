@@ -19,30 +19,25 @@ public class ApiClient
         };
     }
 
-    public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(
+    public async Task<(HttpResponseMessage?, TOutupt?)> Post<TOutupt>(
         string route,
         object payload
         )
-        where TOutput : class
+        where TOutupt : class
     {
         var response = await _httpClient.PostAsync(
-            route,
-            new StringContent(
-                JsonSerializer.Serialize(payload),
-                Encoding.UTF8,
-                "application/json"
+                route,
+                new StringContent(
+                    JsonSerializer.Serialize(
+                        payload,
+                        _defaultSerializerOptions
+                    ),
+                    Encoding.UTF8,
+                    "application/json"
                 )
             );
 
-        var outputString = await response.Content.ReadAsStringAsync();
-        TOutput? output = null;
-        if(!string.IsNullOrWhiteSpace(outputString))
-            output = JsonSerializer.Deserialize<TOutput>(outputString,  
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                }
-        );
+        var output = await GetOutput<TOutupt>(response);
         return (response, output);
     }
 

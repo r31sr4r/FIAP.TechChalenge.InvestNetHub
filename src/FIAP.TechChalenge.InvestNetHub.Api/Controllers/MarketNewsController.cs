@@ -32,8 +32,8 @@ public class MarketNewsController : ControllerBase
     CancellationToken cancellation,
         [FromQuery] string? tickers = null,
         [FromQuery] string? topics = null,
-        [FromQuery] DateTime? fromTime = null,
-        [FromQuery] DateTime? toTime = null,
+        [FromQuery(Name = "from_time")] DateTime? fromTime = null,
+        [FromQuery(Name = "to_time")] DateTime? toTime = null,
         [FromQuery] string? sort = null,
         [FromQuery] int limit = 50
     )
