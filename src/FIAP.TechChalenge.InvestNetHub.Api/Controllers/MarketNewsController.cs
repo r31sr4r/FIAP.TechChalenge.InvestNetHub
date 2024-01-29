@@ -5,6 +5,7 @@ using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.ListUsers;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,6 +13,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class MarketNewsController : ControllerBase
 {
     private readonly ILogger<MarketNewsController> _logger;

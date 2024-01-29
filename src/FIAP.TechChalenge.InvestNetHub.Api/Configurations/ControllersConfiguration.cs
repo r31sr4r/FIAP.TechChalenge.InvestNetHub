@@ -1,5 +1,7 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;
 using FIAP.TechChalenge.InvestNetHub.Api.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations;
 
@@ -26,9 +28,32 @@ public static class ControllersConfiguration
     )
     {
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "JWT Authentication",
+                Description = "Enter the JWT token like this: Bearer {your token}",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer", 
+                BearerFormat = "JWT",
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            options.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {securityScheme, new string[] {} }
+            });
+        });
         return services;
     }
+
 
     public static WebApplication UseDocumentation(
         this WebApplication app
