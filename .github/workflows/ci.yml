@@ -8,6 +8,7 @@ on:
     branches: [ "main", "ci" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   IMAGE_NAME: fiap.techchalenge.investnethub
@@ -89,11 +90,11 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Build and push Docker imagea
+    - name: Build and push Docker images
       uses: docker/build-push-action@v4.1.1
       with:
         context: .
         file: src/FIAP.TechChalenge.InvestNetHub.Api/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }},${{ secrets.DOCKER_HUB_USER}}/${{ env.IMAGE_NAME }}:latest
+        tags: ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }},${{ secrets.DOCKER_HUB_USER}}/${{ env.IMAGE_NAME }}:latest
         
