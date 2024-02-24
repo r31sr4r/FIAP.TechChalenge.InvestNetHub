@@ -40,4 +40,13 @@ jobs:
         verbose: true # Habilita logs detalhados para depuração
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Report Test
+        path: "**/test-results.trx"
+        reporter: dotnet-trx
+        fail-on-error: true
