@@ -1,0 +1,43 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CI do projeto FIAP.TechChalenge.InvestNetHub
+
+on:
+  push:
+    branches: [ "main", "ci" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Start containers
+      run: docker-compose -f "tests/FIAP.TechChalenge.InvestNetHub.E2ETests/docker-compose.yml" up -d --build
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Wait for MySQL
+      uses: iFaxity/wait-on-action@v1.1.0
+      with:
+        resource: tcp:localhost:33060
+        timeout: 60000 # Espera até 60 segundos
+        interval: 1000 # Verifica a cada 1 segundo
+        verbose: true # Habilita logs detalhados para depuração
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
