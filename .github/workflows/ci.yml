@@ -100,7 +100,7 @@ jobs:
         
   deploy:
     name: Deploy to Azure Container Instances
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Login to Azure
