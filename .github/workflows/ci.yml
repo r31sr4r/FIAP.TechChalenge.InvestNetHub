@@ -121,6 +121,6 @@ jobs:
           az container create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --name ${{ secrets.AZURE_CONTAINER_NAME }} \
-            --image ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }} \
+            --image ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:latest \
             --environment-variables ConnectionStrings__InvestHubDb='${{ secrets.DATABASE_CONNECTION_STRING }}' JwtConfig__Secret='${{ secrets.JWT_SECRET }}' \
             --location ${{ secrets.AZURE_REGION }}
