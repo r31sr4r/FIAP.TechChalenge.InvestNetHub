@@ -12,7 +12,7 @@ public class MarketNewsApiTestFixture
 {
     private readonly Faker _faker = new Faker();
 
-    public string GetRandomTicker() => _faker.PickRandom(new List<string> { "IBM", "AAPL", "COIN:BTC", "FOREX:USD" });
+    public string GetRandomTicker() => _faker.PickRandom(new List<string> { "IBM", "AAPL", "COIN", "FOREX:USD" });
 
     public List<string> GetRandomTopics() => _faker.Random.Shuffle(new List<string>
     {

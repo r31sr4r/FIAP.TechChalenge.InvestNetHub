@@ -11,7 +11,9 @@ public class CustomWebApplicationFactory<TStartup>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("E2ETest");
+        var environment = "E2ETest";
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", environment);
+        builder.UseEnvironment(environment);
         builder.ConfigureServices(services =>
         {
             var serviceProvider = services.BuildServiceProvider();
