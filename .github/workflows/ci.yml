@@ -110,7 +110,7 @@ jobs:
     
     - name: Set up Docker Context
       run: |
-        docker context create aci myacicontext
+        docker context create aci myacicontext --subscription-id ${{ secrets.AZURE_SUBSCRIPTION_ID }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --location ${{ secrets.AZURE_REGION }}
         docker context use myacicontext
     
     - name: Log in to Docker Hub
