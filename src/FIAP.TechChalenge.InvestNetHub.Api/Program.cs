@@ -20,7 +20,7 @@ app.Lifetime.ApplicationStopping.Register(() => Log.Information("Application is 
 app.Lifetime.ApplicationStopped.Register(() => Log.Information("Application stopped"));
 
 app.UseDocumentation();
-//app.MigrateDatabase();
+app.MigrateDatabase();
 //app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -98,32 +98,32 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }},${{ secrets.DOCKER_HUB_USER}}/${{ env.IMAGE_NAME }}:latest
         
-  deploy:
-    name: Deploy to Azure Container Instances
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+  # deploy:
+  #   name: Deploy to Azure Container Instances
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Login to Azure
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Delete existing ACI (if exists)
-      uses: azure/cli@v1
-      with:
-        inlineScript: |
-          az container delete --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_CONTAINER_NAME }} --yes || true
+  #   - name: Delete existing ACI (if exists)
+  #     uses: azure/cli@v1
+  #     with:
+  #       inlineScript: |
+  #         az container delete --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AZURE_CONTAINER_NAME }} --yes || true
   
-    - name: Deploy to ACI using Azure CLI
-      uses: azure/cli@v1
-      with:
-        inlineScript: |
-          az container create \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --name ${{ secrets.AZURE_CONTAINER_NAME }} \
-            --image ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:latest \
-            --environment-variables ConnectionStrings__InvestHubDb='${{ secrets.DATABASE_CONNECTION_STRING }}' JwtConfig__Secret='${{ secrets.JWT_SECRET }}' \
-            --location ${{ secrets.AZURE_REGION }} \
-            --dns-name-label fiap-techchalenge-investnethub \
-            --ports 80 443 \
-            --ip-address Public
+  #   - name: Deploy to ACI using Azure CLI
+  #     uses: azure/cli@v1
+  #     with:
+  #       inlineScript: |
+  #         az container create \
+  #           --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+  #           --name ${{ secrets.AZURE_CONTAINER_NAME }} \
+  #           --image ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:latest \
+  #           --environment-variables ConnectionStrings__InvestHubDb='${{ secrets.DATABASE_CONNECTION_STRING }}' JwtConfig__Secret='${{ secrets.JWT_SECRET }}' \
+  #           --location ${{ secrets.AZURE_REGION }} \
+  #           --dns-name-label fiap-techchalenge-investnethub \
+  #           --ports 80 443 \
+  #           --ip-address Public
