@@ -124,3 +124,6 @@ jobs:
             --image ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_NAME }}:latest \
             --environment-variables ConnectionStrings__InvestHubDb='${{ secrets.DATABASE_CONNECTION_STRING }}' JwtConfig__Secret='${{ secrets.JWT_SECRET }}' \
             --location ${{ secrets.AZURE_REGION }}
+            --dns-name-label fiap-techchalenge-investnethub \
+            --ports 80 443 \
+            --ip-address Public
