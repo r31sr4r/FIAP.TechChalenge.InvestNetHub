@@ -1,4 +1,5 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
+using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
 using FIAP.TechChalenge.InvestNetHub.Domain.Validation;
@@ -35,6 +36,8 @@ public class User : AggregateRoot
 
         CreatedAt = DateTime.Now;
         Validate();
+
+        RaiseEvent(new UserCreatedEvent(this.Id, this.CPF));
     }
 
     public string Name { get; private set; }

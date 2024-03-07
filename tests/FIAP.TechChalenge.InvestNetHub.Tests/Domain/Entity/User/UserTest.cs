@@ -80,6 +80,8 @@ public class UserTest
         person.CreatedAt.Should().NotBe(default);
         person.CreatedAt.Should().BeAfter(dateTimeBefore).And.BeBefore(dateTimeAfter);
         person.IsActive.Should().BeTrue();
+
+        person.Events.Should().HaveCount(1);
     }
 
     [Theory(DisplayName = nameof(InstantiateWithIsActiveStatus))]
@@ -122,6 +124,7 @@ public class UserTest
         person.CreatedAt.Should().NotBe(default);
         person.CreatedAt.Should().BeAfter(dateTimeBefore).And.BeBefore(dateTimeAfter);
         person.IsActive.Should().Be(isActive);
+        person.Events.Should().HaveCount(1);
     }
 
 
