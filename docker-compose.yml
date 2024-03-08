@@ -2,17 +2,17 @@ version: '3.4'
 
 services:
 
-  app:
-    container_name: fiap_investnethub_app
-    image: r31sr4r/fiap.techchalenge.investnethub:main-41
-    restart: unless-stopped
-    ports:
-        - 5000:80
-    environment:
-        - ASPNETCORE_URLS=http://+:80
-        - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-        - fiap.techchalenge.investnethub.db
+  # app:
+  #   container_name: fiap_investnethub_app
+  #   image: r31sr4r/fiap.techchalenge.investnethub:main-41
+  #   restart: unless-stopped
+  #   ports:
+  #       - 5000:80
+  #   environment:
+  #       - ASPNETCORE_URLS=http://+:80
+  #       - ASPNETCORE_ENVIRONMENT=Development
+  #   depends_on:
+  #       - fiap.techchalenge.investnethub.db
 
   fiap.techchalenge.investnethub.db:
     container_name: investnethubdb
@@ -22,6 +22,17 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1x.@
+
+  rabbitmq:
+    container_name: investnethub_rabbitmq
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
 
 networks:
   default: 

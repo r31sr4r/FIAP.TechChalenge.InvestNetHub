@@ -41,5 +41,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.CreatedAt)
             .IsRequired();
 
+        builder.Ignore(user => user.Events);
+
     }
 }

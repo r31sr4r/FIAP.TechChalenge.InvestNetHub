@@ -8,6 +8,9 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using FIAP.TechChalenge.InvestNetHub.Application.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
+using FIAP.TechChalenge.InvestNetHub.Application;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace FIAP.TechChalenge.InvestNetHub.IntegrationTests.Application.UseCases.User.UpdateUser;
 
@@ -39,7 +42,15 @@ public class UpdateUserTest
         dbContext.SaveChanges();
         trackingInfo.State = EntityState.Detached;
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
         var useCase = new UseCase.UpdateUser(repository, unitOfWork);
 
         var output = await useCase.Handle(input, CancellationToken.None);
@@ -75,7 +86,15 @@ public class UpdateUserTest
         await dbContext.AddRangeAsync(_fixture.GeUsersList());
         dbContext.SaveChanges();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
         var useCase = new UseCase.UpdateUser(repository, unitOfWork);
 
         var task = async ()
@@ -102,7 +121,15 @@ public class UpdateUserTest
         await dbContext.AddRangeAsync(exampleUsers);
         dbContext.SaveChanges();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
         var useCase = new UseCase.UpdateUser(repository, unitOfWork);
         input.Id = exampleUsers[0].Id;
 

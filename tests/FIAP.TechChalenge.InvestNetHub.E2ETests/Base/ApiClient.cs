@@ -1,4 +1,4 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;
+﻿using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Json;

@@ -1,7 +1,7 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Api.Extensions.String;
+﻿using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.Extensions.String;
 using System.Text.Json;
 
-namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;
+namespace FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
 
 public class JsonSnakeCasePolicy : JsonNamingPolicy
 {

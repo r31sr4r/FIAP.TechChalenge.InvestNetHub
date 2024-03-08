@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Serialization;
 
-namespace FIAP.TechChalenge.InvestNetHub.Api.Extensions.String;
+namespace FIAP.TechChalenge.InvestNetHub.Infra.Messaging.Extensions.String;
 
 public static class StringSnakeCaseExtension
 {

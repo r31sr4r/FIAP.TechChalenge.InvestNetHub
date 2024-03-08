@@ -6,6 +6,9 @@ using FluentAssertions;
 using FIAP.TechChalenge.InvestNetHub.Application.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
+using FIAP.TechChalenge.InvestNetHub.Application;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace FIAP.TechChalenge.InvestNetHub.IntegrationTests.Application.UseCases.User.DeleteUser;
 [Collection(nameof(DeleteUserTestFixture))]
@@ -25,7 +28,15 @@ public class DeleteUserTest
     {
         var dbContext = _fixture.CreateDbContext();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
         var userExample = _fixture.GetValidUser();
         await dbContext.AddRangeAsync(_fixture.GeUsersList());
         var tracking = await dbContext.AddAsync(userExample);
@@ -48,7 +59,15 @@ public class DeleteUserTest
     public async Task ThrowWhenUserNotFound()
     {
         var dbContext = _fixture.CreateDbContext();
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
         var exampleUser = _fixture.GetValidUser();
         dbContext.Add(exampleUser);
         dbContext.SaveChanges();

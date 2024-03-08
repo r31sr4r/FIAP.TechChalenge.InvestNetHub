@@ -1,5 +1,10 @@
-﻿using FluentAssertions;
+﻿using FIAP.TechChalenge.InvestNetHub.Application;
+using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using UnitOfWorkInfra = FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
 
 namespace FIAP.TechChalenge.InvestNetHub.IntegrationTests.Infra.Data.EF.UnitOfWork;
@@ -20,8 +25,21 @@ public class UnitOfWorkTest
     {
         var dbContext = _fixture.CreateDbContext();
         var exampleUserList = _fixture.GetExampleUserList();
+        var userWithEvent = exampleUserList.First();
+        var @event = new DomainEventFake();
+        userWithEvent.RaiseEvent(@event);
+        var eventHandlerMock = new Mock<IDomainEventHandler<DomainEventFake>>();
         await dbContext.Users.AddRangeAsync(exampleUserList);
-        var unitOfWork = new UnitOfWorkInfra.UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        serviceCollection.AddSingleton(eventHandlerMock.Object);
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWorkInfra.UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWorkInfra.UnitOfWork>>()
+        );
 
         await unitOfWork.Commit(CancellationToken.None);
 
@@ -29,6 +47,11 @@ public class UnitOfWorkTest
         var users = await assertDbContext.Users.AsNoTracking().ToListAsync();
 
         users.Should().HaveCount(exampleUserList.Count);
+        eventHandlerMock.Verify(
+            handler => handler.HandleAsync(@event, CancellationToken.None),
+            Times.Once
+        );
+        userWithEvent.Events.Should().BeEmpty();
     }
 
     [Fact(DisplayName = "Rollback")]
@@ -36,7 +59,15 @@ public class UnitOfWorkTest
     public async Task Rollback()
     {
         var dbContext = _fixture.CreateDbContext();
-        var unitOfWork = new UnitOfWorkInfra.UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWorkInfra.UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWorkInfra.UnitOfWork>>()
+        );
 
         var task = async () => await unitOfWork.Rollback(CancellationToken.None);
 

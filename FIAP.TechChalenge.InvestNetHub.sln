@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.TechChalenge.InvestNetHub.Infra.Messaging", "src\FIAP.TechChalenge.InvestNetHub.Infra.Messaging\FIAP.TechChalenge.InvestNetHub.Infra.Messaging.csproj", "{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC3249BD-B83E-43C0-ACDB-40D30203D914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{5B4B9177-6B3C-43C6-B942-E9391BF8CAB6} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
 		{77FACB43-EE50-4CDE-B4CF-D97E1943663E} = {B4CE72DD-6728-4764-AFB9-099FA5CAF7C0}
 		{CC3249BD-B83E-43C0-ACDB-40D30203D914} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
+		{DFEB31A9-6EF6-4C03-B287-07A509FC9D2D} = {21B1678D-720D-4A3F-BA18-CC9E1C757B28}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BB70723-DE7F-4EF4-B7E2-9DAC4836C8CA}

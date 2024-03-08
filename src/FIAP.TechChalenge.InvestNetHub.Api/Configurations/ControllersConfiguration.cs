@@ -1,5 +1,5 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Api.Configurations.Policies;
-using FIAP.TechChalenge.InvestNetHub.Api.Filters;
+﻿using FIAP.TechChalenge.InvestNetHub.Api.Filters;
+using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 

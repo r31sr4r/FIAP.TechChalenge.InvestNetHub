@@ -31,6 +31,7 @@
     <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Api\FIAP.TechChalenge.InvestNetHub.Api.csproj" />
     <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF\FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.csproj" />
     <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices\FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.csproj" />
+    <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Infra.Messaging\FIAP.TechChalenge.InvestNetHub.Infra.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

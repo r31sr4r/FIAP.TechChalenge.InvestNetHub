@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Application\FIAP.TechChalenge.InvestNetHub.Application.csproj" />
     <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Domain\FIAP.TechChalenge.InvestNetHub.Domain.csproj" />
+    <ProjectReference Include="..\..\src\FIAP.TechChalenge.InvestNetHub.Infra.Messaging\FIAP.TechChalenge.InvestNetHub.Infra.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

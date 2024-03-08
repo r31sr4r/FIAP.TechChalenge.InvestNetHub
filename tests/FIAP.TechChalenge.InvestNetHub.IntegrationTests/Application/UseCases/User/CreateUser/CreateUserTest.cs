@@ -1,9 +1,12 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
+﻿using FIAP.TechChalenge.InvestNetHub.Application;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using UseCase = FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 
 namespace FIAP.TechChalenge.InvestNetHub.IntegrationTests.Application.UseCases.User.CreateUser;
@@ -24,8 +27,15 @@ public class CreateUserTest
     {
         var dbContext = _fixture.CreateDbContext();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
-        
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );        
 
         var useCase = new UseCase.CreateUser(
             repository, unitOfWork
@@ -66,7 +76,15 @@ public class CreateUserTest
     {
         var dbContext = _fixture.CreateDbContext();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
 
         var useCase = new UseCase.CreateUser(
             repository, unitOfWork
@@ -115,7 +133,15 @@ public class CreateUserTest
     {
         var dbContext = _fixture.CreateDbContext();
         var repository = new UserRepository(dbContext);
-        var unitOfWork = new UnitOfWork(dbContext);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddLogging();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        var eventPublisher = new DomainEventPublisher(serviceProvider);
+        var unitOfWork = new UnitOfWork(
+            dbContext,
+            eventPublisher,
+            serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()
+        );
 
         var useCase = new UseCase.CreateUser(
             repository, unitOfWork
