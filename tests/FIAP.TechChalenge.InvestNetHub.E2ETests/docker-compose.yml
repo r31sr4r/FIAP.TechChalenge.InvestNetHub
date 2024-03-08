@@ -10,4 +10,17 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: C0D3fl1x.@
 
+  rabbitmq:
+    container_name: investnethub_rabbitmq_e2e
+    image: rabbitmq:3-management
+    hostname: rabbitmqe2e
+    ports:
+      - 25672:15672
+      - 56720:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
 
+networks:
+  default: 
+    name: service_investnethub

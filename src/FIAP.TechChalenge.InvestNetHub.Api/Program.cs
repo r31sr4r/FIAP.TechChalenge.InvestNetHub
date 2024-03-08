@@ -7,7 +7,7 @@ builder.Host.AddLoggingConfiguration();
 
 builder.Services
     .AddAppConnections(builder.Configuration)
-    .AddUseCases()
+    .AddUseCases(builder.Configuration)
     .AddSecurityServices(builder.Configuration)
     .AddAndConfigureControllers();
 
