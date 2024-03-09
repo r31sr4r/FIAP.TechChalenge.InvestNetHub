@@ -52,7 +52,7 @@ public class User : AggregateRoot
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public RiskLevel RiskLevel { get; private set; }
-    public string InvestmentPreferences { get; private set; }
+    public string? InvestmentPreferences { get; private set; }
     public DateTime? AnalysisDate { get; private set; }
     public AnalysisStatus AnalysisStatus { get; private set; }
 

@@ -41,6 +41,20 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.CreatedAt)
             .IsRequired();
 
+        builder.Property(user => user.AnalysisDate)
+            .HasColumnType("datetime(6)");
+
+        builder.Property(user => user.AnalysisStatus)
+            .HasConversion<int>()
+            .IsRequired();
+
+        builder.Property(user => user.InvestmentPreferences)
+            .HasColumnType("longtext");
+
+        builder.Property(user => user.RiskLevel)
+            .HasConversion<int>()
+            .IsRequired();
+
         builder.Ignore(user => user.Events);
 
     }

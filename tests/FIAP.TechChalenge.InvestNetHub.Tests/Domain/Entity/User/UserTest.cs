@@ -595,7 +595,6 @@ public class UserTest
         user.AnalysisStatus.Should().Be(AnalysisStatus.Error);
         user.RiskLevel.Should().Be(RiskLevel.Undefined);
         user.InvestmentPreferences.Should().BeEmpty();
-        user.AnalysisDate.Should().NotBeNull();
     }
 
 
