@@ -1,4 +1,6 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
+﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Enums;
+using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
+using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FluentAssertions;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
@@ -80,6 +82,8 @@ public class UserTest
         person.CreatedAt.Should().NotBe(default);
         person.CreatedAt.Should().BeAfter(dateTimeBefore).And.BeBefore(dateTimeAfter);
         person.IsActive.Should().BeTrue();
+        person.AnalysisStatus.Should().Be(AnalysisStatus.Pending);
+
 
         person.Events.Should().HaveCount(1);
     }
@@ -124,6 +128,7 @@ public class UserTest
         person.CreatedAt.Should().NotBe(default);
         person.CreatedAt.Should().BeAfter(dateTimeBefore).And.BeBefore(dateTimeAfter);
         person.IsActive.Should().Be(isActive);
+        person.AnalysisStatus.Should().Be(AnalysisStatus.Pending);
         person.Events.Should().HaveCount(1);
     }
 
@@ -560,4 +565,36 @@ public class UserTest
 
         return user;
     }
+
+    [Fact(DisplayName = nameof(UpdateAnalysisResultsSuccessfully))]
+    [Trait("Domain", "User - Methods")]
+    public void UpdateAnalysisResultsSuccessfully()
+    {
+        var user = CreateValidUser();
+        var expectedRiskLevel = RiskLevel.Medium;
+        var expectedInvestmentPreferences = "{\"assetTypes\": [\"Stocks\", \"Bonds\"], \"investmentHorizon\": \"LongTerm\", \"interestedSectors\": [\"Technology\", \"Healthcare\"]}";
+        var expectedAnalysisDate = DateTime.UtcNow; 
+
+        user.UpdateAnalysisResults(expectedRiskLevel, expectedInvestmentPreferences, expectedAnalysisDate);
+
+        user.RiskLevel.Should().Be(expectedRiskLevel);
+        user.InvestmentPreferences.Should().Be(expectedInvestmentPreferences);
+        user.AnalysisDate.Should().NotBeNull();
+        user.AnalysisDate.Should().BeCloseTo(expectedAnalysisDate, TimeSpan.FromSeconds(1));
+        user.AnalysisStatus.Should().Be(AnalysisStatus.Completed);
+    }
+
+    [Fact(DisplayName = nameof(UpdateAnalysisAsError))]
+    [Trait("Domain", "User - Methods")]
+    public void UpdateAnalysisAsError()
+    {
+        var user = CreateValidUser();
+
+        user.UpdateAnalysisAsError();
+
+        user.AnalysisStatus.Should().Be(AnalysisStatus.Error);
+    }
+
+
+
 }

@@ -56,6 +56,13 @@ public class CreateUserApiTest
         dbUser.IsActive.Should().Be(input.IsActive);
         dbUser.Id.Should().NotBeEmpty();
 
+        var (@event, remainingMessages) = _fixture.ReadMessageFromRabbitMQ();
+        remainingMessages.Should().Be(0);
+        @event.Should().NotBeNull();
+        @event!.UserId.Should().Be(output.Data.Id);
+        @event.CPF.Should().Be(input.CPF);
+        @event.OccurredOn.Should().NotBeSameDateAs(default);
+
         _fixture.TearDownRabbitMQ();
     }
 
