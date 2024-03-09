@@ -22,6 +22,7 @@ public class CreateUserApiTest
     public async Task CreateUser()
     {
         var input = _fixture.GetInput();
+        _fixture.SetupRabbitMQ();
 
         var (response, output) = await _fixture
             .ApiClient
@@ -54,6 +55,8 @@ public class CreateUserApiTest
         dbUser.RG.Should().Be(input.RG);
         dbUser.IsActive.Should().Be(input.IsActive);
         dbUser.Id.Should().NotBeEmpty();
+
+        _fixture.TearDownRabbitMQ();
     }
 
     [Theory(DisplayName = nameof(ErrorWhenCantInstatiateAggregate))]

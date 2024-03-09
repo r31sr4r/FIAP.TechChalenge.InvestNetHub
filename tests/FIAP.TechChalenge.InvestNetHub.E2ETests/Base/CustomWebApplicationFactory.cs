@@ -1,7 +1,10 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
+using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
 public class CustomWebApplicationFactory<TStartup>
@@ -9,6 +12,8 @@ public class CustomWebApplicationFactory<TStartup>
     where TStartup : class
 
 {
+    public IModel RabbitMQChannel { get; private set; }
+    public RabbitMQConfiguration RabbitMQConfiguration { get; private set; }
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         var environment = "E2ETest";
@@ -19,6 +24,12 @@ public class CustomWebApplicationFactory<TStartup>
             var serviceProvider = services.BuildServiceProvider();
             using (var scope = serviceProvider.CreateScope())
             {
+                RabbitMQChannel = scope.ServiceProvider
+                    .GetService<ChannelManager>()!
+                    .GetChannel();
+                RabbitMQConfiguration = scope.ServiceProvider
+                    .GetService<IOptions<RabbitMQConfiguration>>()!
+                    .Value;
                 var context = scope.ServiceProvider
                     .GetService<FiapTechChalengeDbContext>();
                 ArgumentNullException.ThrowIfNull(context);
