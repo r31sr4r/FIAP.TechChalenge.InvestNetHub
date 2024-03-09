@@ -137,6 +137,9 @@ public class User : AggregateRoot
 
     public void UpdateAnalysisAsError()
     {
+        RiskLevel = RiskLevel.Undefined;
+        InvestmentPreferences = string.Empty;
+        AnalysisDate = null;
         AnalysisStatus = AnalysisStatus.Error;
     }
 
