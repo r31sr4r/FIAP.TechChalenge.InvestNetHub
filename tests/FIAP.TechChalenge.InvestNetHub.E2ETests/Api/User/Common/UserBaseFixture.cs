@@ -2,6 +2,7 @@
 using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
 using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
+using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
@@ -10,8 +11,6 @@ namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.Common;
 public class UserBaseFixture
     : BaseFixture
 {
-    private const string UserCreatedQueue = "user.created.queue";
-    private const string RoutingKey = "user.created";
     public UserPersistence Persistence { get; private set; }
 
     public UserBaseFixture()
@@ -20,28 +19,11 @@ public class UserBaseFixture
         Persistence = new UserPersistence(CreateDbContext());
     }
 
-    public void SetupRabbitMQ()
-    {
-        var channel  = WebAppFactory.RabbitMQChannel;
-        var exchange = WebAppFactory.RabbitMQConfiguration.Exchange;
-        channel.ExchangeDeclare(exchange, "direct", true, true, null);
-        channel.QueueDeclare(UserCreatedQueue, true, false, false, null);
-        channel.QueueBind(UserCreatedQueue, exchange, RoutingKey, null);
-    }
-
-    public void TearDownRabbitMQ()
-    {
-        var channel = WebAppFactory.RabbitMQChannel;
-        var exchange = WebAppFactory.RabbitMQConfiguration.Exchange;
-        channel.QueueUnbind(UserCreatedQueue, exchange, RoutingKey, null);
-        channel.QueueDelete(UserCreatedQueue, false, false);
-        channel.ExchangeDelete(UserCreatedQueue, false);    
-    }   
 
     public (UserCreatedEvent?, uint) ReadMessageFromRabbitMQ()
     {
         var channel = WebAppFactory.RabbitMQChannel;
-        var consumingResult = channel.BasicGet(UserCreatedQueue, true);
+        var consumingResult = channel.BasicGet(WebAppFactory.UserCreatedQueue, true);
         var rawMessage = consumingResult.Body.ToArray();
         var stringMessage = Encoding.UTF8.GetString(rawMessage);
         var jsonOptions = new JsonSerializerOptions
@@ -51,6 +33,13 @@ public class UserBaseFixture
         var @event = JsonSerializer.Deserialize<UserCreatedEvent>(
             stringMessage, jsonOptions);
         return (@event, consumingResult.MessageCount);
+    }
+
+    public void PurgeRabbitMQQueues()
+    {
+        IModel channel = WebAppFactory.RabbitMQChannel;
+        channel.QueuePurge(WebAppFactory.UserCreatedQueue);
+        channel.QueuePurge(WebAppFactory.RabbitMQConfiguration.UserAnalysisResultQueue);
     }
 
     public string GetValidUserName()

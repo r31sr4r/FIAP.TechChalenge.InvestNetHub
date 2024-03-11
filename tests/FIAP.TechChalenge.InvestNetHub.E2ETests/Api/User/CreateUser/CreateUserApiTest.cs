@@ -22,7 +22,6 @@ public class CreateUserApiTest
     public async Task CreateUser()
     {
         var input = _fixture.GetInput();
-        _fixture.SetupRabbitMQ();
 
         var (response, output) = await _fixture
             .ApiClient
@@ -62,8 +61,7 @@ public class CreateUserApiTest
         @event!.UserId.Should().Be(output.Data.Id);
         @event.CPF.Should().Be(input.CPF);
         @event.OccurredOn.Should().NotBeSameDateAs(default);
-
-        _fixture.TearDownRabbitMQ();
+        _fixture.PurgeRabbitMQQueues();
     }
 
     [Theory(DisplayName = nameof(ErrorWhenCantInstatiateAggregate))]
