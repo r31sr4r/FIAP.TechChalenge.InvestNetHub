@@ -1,6 +1,7 @@
 ﻿using Bogus.Extensions.Brazil;
 using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
+using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.DTOs;
 using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
 using RabbitMQ.Client;
 using System.Text;
@@ -19,18 +20,35 @@ public class UserBaseFixture
         Persistence = new UserPersistence(CreateDbContext());
     }
 
+    internal void PublishMessageToRabbitMQ(object exampleEvent)
+    {
+        var exchange = WebAppFactory.RabbitMQConfiguration.Exchange;
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = new JsonSnakeCasePolicy()
+        };
+        var message = JsonSerializer.SerializeToUtf8Bytes(exampleEvent, jsonOptions);
+        WebAppFactory.RabbitMQChannel.BasicPublish(
+            exchange: exchange,
+            routingKey: WebAppFactory.UserAnalysisResultRoutingKey,
+            body: message
+        );
+    }
 
-    public (UserCreatedEvent?, uint) ReadMessageFromRabbitMQ()
+    public (T?, uint) ReadMessageFromRabbitMQ<T>()
+        where T : class
     {
         var channel = WebAppFactory.RabbitMQChannel;
-        var consumingResult = channel.BasicGet(WebAppFactory.UserCreatedQueue, true);
+        var consumingResult = channel
+            .BasicGet(WebAppFactory.UserCreatedQueue, true);
+        if (consumingResult == null) return (null, 0);
         var rawMessage = consumingResult.Body.ToArray();
         var stringMessage = Encoding.UTF8.GetString(rawMessage);
         var jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = new JsonSnakeCasePolicy()
         };
-        var @event = JsonSerializer.Deserialize<UserCreatedEvent>(
+        var @event = JsonSerializer.Deserialize<T>(
             stringMessage, jsonOptions);
         return (@event, consumingResult.MessageCount);
     }
@@ -124,4 +142,6 @@ public class UserBaseFixture
             .Select(_ => GetValidUser()
         ).ToList();
     }
+
+
 }

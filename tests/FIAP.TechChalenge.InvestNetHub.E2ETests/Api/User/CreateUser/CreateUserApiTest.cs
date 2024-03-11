@@ -1,6 +1,7 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
+using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,8 @@ public class CreateUserApiTest
         dbUser.IsActive.Should().Be(input.IsActive);
         dbUser.Id.Should().NotBeEmpty();
 
-        var (@event, remainingMessages) = _fixture.ReadMessageFromRabbitMQ();
+        var (@event, remainingMessages) = _fixture
+            .ReadMessageFromRabbitMQ<UserCreatedEvent>();
         remainingMessages.Should().Be(0);
         @event.Should().NotBeNull();
         @event!.UserId.Should().Be(output.Data.Id);

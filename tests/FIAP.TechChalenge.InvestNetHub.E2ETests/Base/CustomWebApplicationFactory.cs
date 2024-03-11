@@ -13,8 +13,8 @@ public class CustomWebApplicationFactory<TStartup>
 
 {
     private const string UserCreatedRoutingKey = "user.created";
-    private const string UserAnalysisResultRoutingKey = "user.created";
     public IModel RabbitMQChannel { get; private set; }
+    public string UserAnalysisResultRoutingKey => "user.analysis.result";
     public string UserCreatedQueue => "user.created.queue";
     public RabbitMQConfiguration RabbitMQConfiguration { get; private set; }
     protected override void ConfigureWebHost(IWebHostBuilder builder)
