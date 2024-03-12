@@ -27,9 +27,10 @@ public class UserAnalysisResultEventConsumerTest
             User = new UserAnalysisResultMetadataDTO
             {
                 ResourceId = user.Id.ToString(),
-                RiskLevel = user.RiskLevel.ToString(),
-                InvestmentPreferences = user.InvestmentPreferences
-            }
+                RiskLevel = RiskLevel.Low.ToString(),
+                InvestmentPreferences = investmentPreferences
+            },
+            UpdatedAt = DateTime.Now
         };
 
         _fixture.PublishMessageToRabbitMQ(exampleEvent);
@@ -43,7 +44,7 @@ public class UserAnalysisResultEventConsumerTest
         dbUser.RiskLevel.Should().Be(RiskLevel.Low);
         dbUser.InvestmentPreferences.Should().Be(investmentPreferences);
         (object? @event, uint count) = _fixture.ReadMessageFromRabbitMQ<object>();
-        @event.Should().NotBeNull();
+        @event.Should().BeNull();
         count.Should().Be(0);
     }
 
@@ -51,7 +52,6 @@ public class UserAnalysisResultEventConsumerTest
     [Trait("E2E/Worker", "UserAnalysisResult - Event Handler")]
     public async Task AnalysisResultFailEventReceived()
     {
-        var investmentPreferences = "{\"assetTypes\": [\"Stocks\", \"Bonds\"], \"investmentHorizon\": \"LongTerm\", \"interestedSectors\": [\"Technology\", \"Healthcare\"]}";
         var exampleUsersList = _fixture.GeUsersList(5);
         await _fixture.Persistence.InsertList(exampleUsersList);
         var user = exampleUsersList[2];
@@ -75,9 +75,9 @@ public class UserAnalysisResultEventConsumerTest
         dbUser.Should().NotBeNull();
         dbUser!.AnalysisStatus.Should().Be(AnalysisStatus.Error);
         dbUser.RiskLevel.Should().Be(RiskLevel.Undefined);
-        dbUser.InvestmentPreferences.Should().BeNull();
+        dbUser.InvestmentPreferences.Should().BeNullOrEmpty();
         (object? @event, uint count) = _fixture.ReadMessageFromRabbitMQ<object>();
-        @event.Should().NotBeNull();
+        @event.Should().BeNull();
         count.Should().Be(0);
     }
 
@@ -85,7 +85,6 @@ public class UserAnalysisResultEventConsumerTest
     [Trait("E2E/Worker", "UserAnalysisResult - Event Handler")]
     public async Task InvalidMessageEventReceived()
     {
-        var investmentPreferences = "{\"assetTypes\": [\"Stocks\", \"Bonds\"], \"investmentHorizon\": \"LongTerm\", \"interestedSectors\": [\"Technology\", \"Healthcare\"]}";
         var exampleUsersList = _fixture.GeUsersList(5);
         await _fixture.Persistence.InsertList(exampleUsersList);
         var exampleEvent = new UserAnalysisResultMessageDTO

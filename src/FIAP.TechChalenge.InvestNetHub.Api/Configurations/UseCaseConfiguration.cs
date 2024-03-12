@@ -23,14 +23,13 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations;
 public static class UseCaseConfiguration
 {
     public static IServiceCollection AddUseCases(
-               this IServiceCollection services,
-               IConfiguration configuration
+               this IServiceCollection services
            )
     {
         services.AddMediatR(typeof(CreateUser));
         services.AddRepositories();
         services.AddExternalServices();
-        services.AddDomainEvents(configuration);
+        services.AddDomainEvents();
         services.AddTransient<IMarketNewsRepository, MarketNewsRepository>();
 
         return services;
@@ -56,39 +55,11 @@ public static class UseCaseConfiguration
     }
 
     private static IServiceCollection AddDomainEvents(
-        this IServiceCollection services,
-        IConfiguration configuration
+        this IServiceCollection services
        )
     {
         services.AddTransient<IDomainEventPublisher, DomainEventPublisher>();
         services.AddTransient<IDomainEventHandler<UserCreatedEvent>, SendToAnalysisEventHandler>();
-
-        services.Configure<RabbitMQConfiguration>(
-            configuration.GetSection(RabbitMQConfiguration.ConfigurationSection)
-        );
-
-        services.AddSingleton(sp =>
-        {
-            RabbitMQConfiguration config = sp
-                .GetRequiredService<IOptions<RabbitMQConfiguration>>().Value;
-            var factory = new ConnectionFactory
-            {
-                HostName = config.HostName,
-                Port = config.Port,
-                UserName = config.UserName,
-                Password = config.Password
-            };
-            return factory.CreateConnection();
-        });
-
-        services.AddSingleton<ChannelManager>();
-
-        services.AddTransient<IMessageProducer>(sp =>
-        {
-            var channelManager = sp.GetRequiredService<ChannelManager>();
-            var config = sp.GetRequiredService<IOptions<RabbitMQConfiguration>>();
-            return new RabbitMQProducer(channelManager.GetChannel(), config);
-        });
 
         return services;
     }

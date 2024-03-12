@@ -9,6 +9,11 @@ using System.Text.Json;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.Common;
+
+[CollectionDefinition(nameof(UserBaseFixture))]
+public class UserBaseFixtureCollection
+    : ICollectionFixture<UserBaseFixture>
+{ }
 public class UserBaseFixture
     : BaseFixture
 {
