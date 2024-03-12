@@ -1,5 +1,4 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
 using FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.Common;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.UpdateUser;

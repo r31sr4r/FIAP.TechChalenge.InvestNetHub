@@ -1,8 +1,6 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
-using FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.UpdateUser;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

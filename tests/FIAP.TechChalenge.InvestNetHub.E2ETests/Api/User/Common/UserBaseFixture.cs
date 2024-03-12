@@ -1,17 +1,22 @@
 ﻿using Bogus.Extensions.Brazil;
 using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
+using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.DTOs;
 using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.JsonPolicies;
+using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Api.User.Common;
+
+[CollectionDefinition(nameof(UserBaseFixture))]
+public class UserBaseFixtureCollection
+    : ICollectionFixture<UserBaseFixture>
+{ }
 public class UserBaseFixture
     : BaseFixture
 {
-    private const string UserCreatedQueue = "user.created.queue";
-    private const string RoutingKey = "user.created";
     public UserPersistence Persistence { get; private set; }
 
     public UserBaseFixture()
@@ -20,37 +25,44 @@ public class UserBaseFixture
         Persistence = new UserPersistence(CreateDbContext());
     }
 
-    public void SetupRabbitMQ()
+    internal void PublishMessageToRabbitMQ(object exampleEvent)
     {
-        var channel  = WebAppFactory.RabbitMQChannel;
         var exchange = WebAppFactory.RabbitMQConfiguration.Exchange;
-        channel.ExchangeDeclare(exchange, "direct", true, true, null);
-        channel.QueueDeclare(UserCreatedQueue, true, false, false, null);
-        channel.QueueBind(UserCreatedQueue, exchange, RoutingKey, null);
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = new JsonSnakeCasePolicy()
+        };
+        var message = JsonSerializer.SerializeToUtf8Bytes(exampleEvent, jsonOptions);
+        WebAppFactory.RabbitMQChannel.BasicPublish(
+            exchange: exchange,
+            routingKey: WebAppFactory.UserAnalysisResultRoutingKey,
+            body: message
+        );
     }
 
-    public void TearDownRabbitMQ()
+    public (T?, uint) ReadMessageFromRabbitMQ<T>()
+        where T : class
     {
         var channel = WebAppFactory.RabbitMQChannel;
-        var exchange = WebAppFactory.RabbitMQConfiguration.Exchange;
-        channel.QueueUnbind(UserCreatedQueue, exchange, RoutingKey, null);
-        channel.QueueDelete(UserCreatedQueue, false, false);
-        channel.ExchangeDelete(UserCreatedQueue, false);    
-    }   
-
-    public (UserCreatedEvent?, uint) ReadMessageFromRabbitMQ()
-    {
-        var channel = WebAppFactory.RabbitMQChannel;
-        var consumingResult = channel.BasicGet(UserCreatedQueue, true);
+        var consumingResult = channel
+            .BasicGet(WebAppFactory.UserCreatedQueue, true);
+        if (consumingResult == null) return (null, 0);
         var rawMessage = consumingResult.Body.ToArray();
         var stringMessage = Encoding.UTF8.GetString(rawMessage);
         var jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = new JsonSnakeCasePolicy()
         };
-        var @event = JsonSerializer.Deserialize<UserCreatedEvent>(
+        var @event = JsonSerializer.Deserialize<T>(
             stringMessage, jsonOptions);
         return (@event, consumingResult.MessageCount);
+    }
+
+    public void PurgeRabbitMQQueues()
+    {
+        IModel channel = WebAppFactory.RabbitMQChannel;
+        channel.QueuePurge(WebAppFactory.UserCreatedQueue);
+        channel.QueuePurge(WebAppFactory.RabbitMQConfiguration.UserAnalysisResultQueue);
     }
 
     public string GetValidUserName()
@@ -135,4 +147,6 @@ public class UserBaseFixture
             .Select(_ => GetValidUser()
         ).ToList();
     }
+
+
 }

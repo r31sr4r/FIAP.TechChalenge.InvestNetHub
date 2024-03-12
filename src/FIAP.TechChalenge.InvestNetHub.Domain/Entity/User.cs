@@ -1,4 +1,5 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
+﻿using FIAP.TechChalenge.InvestNetHub.Domain.Common.Enums;
+using FIAP.TechChalenge.InvestNetHub.Domain.Common.Security;
 using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.Domain.Exceptions;
 using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
@@ -35,6 +36,7 @@ public class User : AggregateRoot
         IsActive = isActive;
 
         CreatedAt = DateTime.Now;
+        AnalysisStatus = AnalysisStatus.Pending;
         Validate();
 
         RaiseEvent(new UserCreatedEvent(this.Id, this.CPF));
@@ -49,6 +51,10 @@ public class User : AggregateRoot
     public string? Password { get; private set; } 
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public RiskLevel RiskLevel { get; private set; }
+    public string? InvestmentPreferences { get; private set; }
+    public DateTime? AnalysisDate { get; private set; }
+    public AnalysisStatus AnalysisStatus { get; private set; }
 
     public void Update(string name, string email, string phone, string cpf, DateTime dateOfBirth, string? rg = null)
     {
@@ -117,4 +123,24 @@ public class User : AggregateRoot
 
         this.Password = PasswordHasher.HashPassword(newPassword);
     }
+
+    public void UpdateAnalysisResults(
+        RiskLevel riskLevel, 
+        string investmentPreferences, 
+        DateTime analysisDate)
+    {
+        RiskLevel = riskLevel;
+        InvestmentPreferences = investmentPreferences;
+        AnalysisDate = analysisDate;
+        AnalysisStatus = AnalysisStatus.Completed;
+    }
+
+    public void UpdateAnalysisAsError()
+    {
+        RiskLevel = RiskLevel.Undefined;
+        InvestmentPreferences = string.Empty;
+        AnalysisDate = null;
+        AnalysisStatus = AnalysisStatus.Error;
+    }
+
 }

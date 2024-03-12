@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
-public class BaseFixture
+public class BaseFixture : IDisposable
 {
     protected Faker Faker { get; set; }
 
@@ -46,5 +46,8 @@ public class BaseFixture
         context.Database.EnsureCreated();
     }
 
-
+    public void Dispose()
+    {
+        WebAppFactory.Dispose();
+    }
 }

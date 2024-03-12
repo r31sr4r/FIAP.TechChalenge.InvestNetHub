@@ -1,6 +1,7 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
+using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,6 @@ public class CreateUserApiTest
     public async Task CreateUser()
     {
         var input = _fixture.GetInput();
-        _fixture.SetupRabbitMQ();
 
         var (response, output) = await _fixture
             .ApiClient
@@ -56,7 +56,14 @@ public class CreateUserApiTest
         dbUser.IsActive.Should().Be(input.IsActive);
         dbUser.Id.Should().NotBeEmpty();
 
-        _fixture.TearDownRabbitMQ();
+        var (@event, remainingMessages) = _fixture
+            .ReadMessageFromRabbitMQ<UserCreatedEvent>();
+        remainingMessages.Should().Be(0);
+        @event.Should().NotBeNull();
+        @event!.UserId.Should().Be(output.Data.Id);
+        @event.CPF.Should().Be(input.CPF);
+        @event.OccurredOn.Should().NotBeSameDateAs(default);
+        _fixture.PurgeRabbitMQQueues();
     }
 
     [Theory(DisplayName = nameof(ErrorWhenCantInstatiateAggregate))]

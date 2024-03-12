@@ -1,5 +1,4 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Common;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
+﻿using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.Update;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
 using DomainEntity = FIAP.TechChalenge.InvestNetHub.Domain.Entity;

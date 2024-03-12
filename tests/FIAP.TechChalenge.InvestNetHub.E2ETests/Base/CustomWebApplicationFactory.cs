@@ -8,11 +8,14 @@ using RabbitMQ.Client;
 
 namespace FIAP.TechChalenge.InvestNetHub.E2ETests.Base;
 public class CustomWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup>
+    : WebApplicationFactory<TStartup>, IDisposable
     where TStartup : class
 
 {
+    private const string UserCreatedRoutingKey = "user.created";
     public IModel RabbitMQChannel { get; private set; }
+    public string UserAnalysisResultRoutingKey => "user.analysis.result";
+    public string UserCreatedQueue => "user.created.queue";
     public RabbitMQConfiguration RabbitMQConfiguration { get; private set; }
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -30,6 +33,7 @@ public class CustomWebApplicationFactory<TStartup>
                 RabbitMQConfiguration = scope.ServiceProvider
                     .GetService<IOptions<RabbitMQConfiguration>>()!
                     .Value;
+                SetupRabbitMQ();
                 var context = scope.ServiceProvider
                     .GetService<FiapTechChalengeDbContext>();
                 ArgumentNullException.ThrowIfNull(context);
@@ -40,4 +44,33 @@ public class CustomWebApplicationFactory<TStartup>
 
         base.ConfigureWebHost(builder);
     }
+
+    public void SetupRabbitMQ()
+    {
+        var channel = RabbitMQChannel;
+        var exchange = RabbitMQConfiguration.Exchange;
+        channel.ExchangeDeclare(exchange, "direct", true, true, null);
+        channel.QueueDeclare(UserCreatedQueue, true, false, false, null);
+        channel.QueueBind(UserCreatedQueue, exchange, UserCreatedRoutingKey, null);
+        channel.QueueDeclare(RabbitMQConfiguration.UserAnalysisResultQueue, true, false, false, null);
+        channel.QueueBind(RabbitMQConfiguration.UserAnalysisResultQueue, exchange, UserAnalysisResultRoutingKey, null);
+    }
+
+    public override ValueTask DisposeAsync()
+    {
+        TearDownRabbitMQ();
+        return base.DisposeAsync();
+    }
+
+    private void TearDownRabbitMQ()
+    {
+        var channel = RabbitMQChannel;
+        var exchange = RabbitMQConfiguration.Exchange;
+        channel.QueueUnbind(UserCreatedQueue, exchange, UserCreatedRoutingKey, null);
+        channel.QueueDelete(UserCreatedQueue, false, false);
+        channel.QueueUnbind(RabbitMQConfiguration.UserAnalysisResultQueue, exchange, UserAnalysisResultRoutingKey, null);
+        channel.QueueDelete(RabbitMQConfiguration.UserAnalysisResultQueue, false, false);
+        channel.ExchangeDelete(UserCreatedQueue, false);
+    }
+
 }

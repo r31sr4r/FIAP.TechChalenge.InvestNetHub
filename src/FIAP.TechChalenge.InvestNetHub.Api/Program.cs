@@ -7,7 +7,10 @@ builder.Host.AddLoggingConfiguration();
 
 builder.Services
     .AddAppConnections(builder.Configuration)
-    .AddUseCases(builder.Configuration)
+    .AddUseCases()
+    .AddRabbitMQ(builder.Configuration)
+    .AddMessageProduder()
+    .AddMessageConsumer()
     .AddSecurityServices(builder.Configuration)
     .AddAndConfigureControllers();
 
