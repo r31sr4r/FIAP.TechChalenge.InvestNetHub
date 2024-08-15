@@ -1,5 +1,5 @@
-﻿using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
-using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Configurations;
+﻿using System.Reflection;
+using FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
@@ -7,6 +7,9 @@ public class FiapTechChalengeDbContext
     : DbContext
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<Portfolio> Portfolios => Set<Portfolio>();
+    public DbSet<Asset> Assets => Set<Asset>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
 
     public FiapTechChalengeDbContext(
         DbContextOptions<FiapTechChalengeDbContext> options)
@@ -14,7 +17,9 @@ public class FiapTechChalengeDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            base.OnModelCreating(modelBuilder);
     }
 }
 
