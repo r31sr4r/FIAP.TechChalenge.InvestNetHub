@@ -28,4 +28,16 @@ public class PortfolioUseCasesBaseFixture
             .Select(_ => GetValidPortfolio())
             .ToList();
     }
+    public string GetValidPortfolioName()
+    {
+        var portfolioName = Faker.Company.CompanyName();
+        if (portfolioName.Length > 255)
+            portfolioName = portfolioName.Substring(0, 255);
+        return portfolioName;
+    }
+
+    public string GetValidPortfolioDescription()
+    {
+        return Faker.Lorem.Sentence();
+    }
 }
