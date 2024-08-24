@@ -14,6 +14,7 @@ using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork.SearchableRepository;
 using MediatR;
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Api.Extensions;
+using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Portfolio;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
 {
@@ -38,7 +39,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> Create(
-            [FromBody] CreatePortfolioInput apiInput,
+            [FromBody] CreatePortfolioApiInput apiInput,
             CancellationToken cancellationToken)
         {
             var userId = User.GetUserId();
@@ -48,7 +49,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
             }
 
             var input = new CreatePortfolioInput(
-                userId.Value, // Ensure the portfolio is tied to the authenticated user
+                userId.Value, 
                 apiInput.Name,
                 apiInput.Description
             );
@@ -62,7 +63,6 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
             );
         }
 
-        [AllowAnonymous]
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ApiResponse<PortfolioModelOutput>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -136,7 +136,6 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
             return Ok(new ApiResponse<PortfolioModelOutput>(result));
         }
 
-        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(ListPortfoliosOutput), StatusCodes.Status200OK)]
         public async Task<IActionResult> List(
