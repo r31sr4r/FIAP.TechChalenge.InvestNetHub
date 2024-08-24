@@ -32,4 +32,9 @@ public class PortfolioUseCasesBaseFixture
             .Select(_ => GetValidPortfolio())
             .ToList();
     }
+
+    public string GetValidUserId()
+    {
+        return Faker.Random.Guid().ToString();
+    }
 }
