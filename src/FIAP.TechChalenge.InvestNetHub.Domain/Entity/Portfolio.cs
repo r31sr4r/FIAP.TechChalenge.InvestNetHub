@@ -9,7 +9,7 @@ public class Portfolio : AggregateRoot
     private readonly List<Asset> _assets = new();
     private readonly List<Transaction> _transactions = new();
 
-    public Portfolio(string userId, string name, string description)
+    public Portfolio(Guid userId, string name, string description)
     {
         UserId = userId;
         Name = name;
@@ -19,7 +19,7 @@ public class Portfolio : AggregateRoot
         Validate();
     }
 
-    public string UserId { get; private set; }
+    public Guid UserId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -64,8 +64,6 @@ public class Portfolio : AggregateRoot
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(UserId))
-            throw new EntityValidationException($"{nameof(UserId)} should not be empty or null");
         if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
         if (Name.Length <= 3)

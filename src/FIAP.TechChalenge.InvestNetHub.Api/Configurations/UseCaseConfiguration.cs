@@ -1,8 +1,6 @@
 ﻿using FIAP.TechChalenge.InvestNetHub.Application;
 using FIAP.TechChalenge.InvestNetHub.Application.EventHandlers;
 using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.CreateMarketNews;
-using FIAP.TechChalenge.InvestNetHub.Application.UseCases.MarketNews.ListMarketNews;
 using FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.CreateUser;
 using FIAP.TechChalenge.InvestNetHub.Domain.Events;
 using FIAP.TechChalenge.InvestNetHub.Domain.Repository;
@@ -12,11 +10,7 @@ using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories;
 using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.AlphaVantage;
 using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Common;
 using FIAP.TechChalenge.InvestNetHub.Infra.ExternalServices.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.Configuration;
-using FIAP.TechChalenge.InvestNetHub.Infra.Messaging.Producer;
 using MediatR;
-using Microsoft.Extensions.Options;
-using RabbitMQ.Client;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Configurations;
 
@@ -40,6 +34,7 @@ public static class UseCaseConfiguration
        )
     {
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IPortfolioRepository, PortfolioRepository>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;
     }

@@ -5,7 +5,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Application.UseCases.Portfolio.CreatePo
 public class CreatePortfolioInput : IRequest<PortfolioModelOutput>
 {
     public CreatePortfolioInput(
-        string userId,
+        Guid userId,
         string name,
         string description
     )
@@ -15,7 +15,7 @@ public class CreatePortfolioInput : IRequest<PortfolioModelOutput>
         Description = description;
     }
 
-    public string UserId { get; set; }
+    public Guid UserId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
 }

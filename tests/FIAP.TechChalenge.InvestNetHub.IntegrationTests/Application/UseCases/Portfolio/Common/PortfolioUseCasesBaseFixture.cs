@@ -21,7 +21,7 @@ public class PortfolioUseCasesBaseFixture
 
     public DomainEntity.Portfolio GetValidPortfolio()
         => new(
-            Faker.Random.Guid().ToString(),
+            Faker.Random.Guid(),
             GetValidPortfolioName(),
             GetValidPortfolioDescription()
         );
@@ -33,8 +33,8 @@ public class PortfolioUseCasesBaseFixture
             .ToList();
     }
 
-    public string GetValidUserId()
+    public Guid GetValidUserId()
     {
-        return Faker.Random.Guid().ToString();
+        return Faker.Random.Guid();
     }
 }

@@ -16,7 +16,7 @@ public class PortfolioUseCasesBaseFixture
     public DomainEntity.Portfolio GetValidPortfolio()
     {
         return new DomainEntity.Portfolio(
-            Faker.Random.Guid().ToString(),
+            Guid.NewGuid(),
             Faker.Company.CompanyName(),
             Faker.Lorem.Sentence()
         );

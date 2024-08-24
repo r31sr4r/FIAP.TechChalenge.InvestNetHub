@@ -15,7 +15,7 @@ public class CreatePortfolioTestFixture
     {
         var portfolio = GetValidPortfolio();
         return new CreatePortfolioInput(
-            portfolio.Id.ToString(),
+            portfolio.UserId,
             portfolio.Name,
             portfolio.Description
         );

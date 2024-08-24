@@ -21,7 +21,7 @@ public class PortfolioRepositoryTestFixture
     public Portfolio GetValidPortfolio()
     {
         return new Portfolio(
-            Guid.NewGuid().ToString(),
+            Guid.NewGuid(),
             "My Portfolio",
             "This is a test portfolio"
         );

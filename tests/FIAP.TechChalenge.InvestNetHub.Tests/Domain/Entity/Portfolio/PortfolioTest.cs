@@ -16,7 +16,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Portfolio
         {
             var validData = new
             {
-                UserId = Guid.NewGuid().ToString(),
+                UserId = Guid.NewGuid(),
                 Name = "My Portfolio",
                 Description = "This is a test portfolio"
             };
@@ -40,7 +40,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Portfolio
         public void InstantiateErrorWhenNameIsInvalid(string? name)
         {
             Action action = () => new DomainEntity.Portfolio(
-                Guid.NewGuid().ToString(),
+                Guid.NewGuid(),
                 name!,
                 "This is a test portfolio"
             );
@@ -183,7 +183,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Portfolio
         private DomainEntity.Portfolio CreateValidPortfolio()
         {
             return new DomainEntity.Portfolio(
-                Guid.NewGuid().ToString(),
+                Guid.NewGuid(),
                 "My Portfolio",
                 "This is a test portfolio"
             );
