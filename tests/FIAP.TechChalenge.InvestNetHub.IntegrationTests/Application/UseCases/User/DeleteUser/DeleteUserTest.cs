@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using UseCase = FIAP.TechChalenge.InvestNetHub.Application.UseCases.User.DeleteUser;
 using FluentAssertions;
 using FIAP.TechChalenge.InvestNetHub.Application.Exceptions;
-using FIAP.TechChalenge.InvestNetHub.Application.Interfaces;
-using FIAP.TechChalenge.InvestNetHub.Domain.SeedWork;
 using FIAP.TechChalenge.InvestNetHub.Application;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
