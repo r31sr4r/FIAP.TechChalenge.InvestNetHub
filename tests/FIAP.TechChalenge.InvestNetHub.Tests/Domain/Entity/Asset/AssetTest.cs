@@ -15,15 +15,25 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
             {
                 Type = AssetType.Stock,
                 Name = "Apple Inc.",
-                Code = "AAPL"
+                Code = "AAPL",
+                Quantity = 50,
+                Price = 150.25m
             };
 
-            var asset = new DomainEntity.Asset(validData.Type, validData.Name, validData.Code);
+            var asset = new DomainEntity.Asset(
+                validData.Type, 
+                validData.Name, 
+                validData.Code, 
+                validData.Quantity, 
+                validData.Price
+            );
 
             asset.Should().NotBeNull();
             asset.Type.Should().Be(validData.Type);
             asset.Name.Should().Be(validData.Name);
             asset.Code.Should().Be(validData.Code);
+            asset.Quantity.Should().Be(validData.Quantity);
+            asset.Price.Should().Be(validData.Price);
             asset.Id.Should().NotBeEmpty();
         }
 
@@ -34,7 +44,13 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         [InlineData("  ")]
         public void InstantiateErrorWhenNameIsEmpty(string? name)
         {
-            Action action = () => new DomainEntity.Asset(AssetType.Stock, name!, "AAPL");
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                name!, 
+                "AAPL", 
+                50, 
+                150.25m
+            );
 
             action.Should()
                 .Throw<EntityValidationException>()
@@ -48,7 +64,13 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         [InlineData("  ")]
         public void InstantiateErrorWhenCodeIsEmpty(string? code)
         {
-            Action action = () => new DomainEntity.Asset(AssetType.Stock, "Apple Inc.", code!);
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                "Apple Inc.", 
+                code!, 
+                50, 
+                150.25m
+            );
 
             action.Should()
                 .Throw<EntityValidationException>()
@@ -61,7 +83,13 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         [InlineData("A")]
         public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
-            Action action = () => new DomainEntity.Asset(AssetType.Stock, invalidName, "AAPL");
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                invalidName, 
+                "AAPL", 
+                50, 
+                150.25m
+            );
 
             action.Should()
                 .Throw<EntityValidationException>()
@@ -74,11 +102,55 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         {
             var invalidName = new string('a', 256);
 
-            Action action = () => new DomainEntity.Asset(AssetType.Stock, invalidName, "AAPL");
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                invalidName, 
+                "AAPL", 
+                50, 
+                150.25m
+            );
 
             action.Should()
                 .Throw<EntityValidationException>()
                 .WithMessage("Name should be less than 255 characters");
+        }
+
+        [Theory(DisplayName = nameof(InstantiateErrorWhenQuantityIsInvalid))]
+        [Trait("Domain", "Asset - Entity")]
+        [InlineData(-1)]
+        [InlineData(-10)]
+        public void InstantiateErrorWhenQuantityIsInvalid(int quantity)
+        {
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                "Apple Inc.", 
+                "AAPL", 
+                quantity, 
+                150.25m
+            );
+
+            action.Should()
+                .Throw<EntityValidationException>()
+                .WithMessage("Quantity should not be negative");
+        }
+
+        [Theory(DisplayName = nameof(InstantiateErrorWhenPriceIsInvalid))]
+        [Trait("Domain", "Asset - Entity")]
+        [InlineData(0)]
+        [InlineData(-10.5)]
+        public void InstantiateErrorWhenPriceIsInvalid(decimal price)
+        {
+            Action action = () => new DomainEntity.Asset(
+                AssetType.Stock, 
+                "Apple Inc.", 
+                "AAPL", 
+                50, 
+                price
+            );
+
+            action.Should()
+                .Throw<EntityValidationException>()
+                .WithMessage("Price should be greater than 0");
         }
     }
 }

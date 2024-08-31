@@ -194,7 +194,9 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Portfolio
             return new DomainEntity.Asset(
                 AssetType.Stock,
                 "Apple Inc.",
-                "AAPL"
+                "AAPL",
+                2,
+                150.25m
             );
         }
 

@@ -12,6 +12,5 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Repository
 
         Task AddTransactionAsync(Guid portfolioId, Transaction transaction, CancellationToken cancellationToken);
         Task RemoveTransactionAsync(Guid portfolioId, Guid transactionId, CancellationToken cancellationToken);
-
     }
 }

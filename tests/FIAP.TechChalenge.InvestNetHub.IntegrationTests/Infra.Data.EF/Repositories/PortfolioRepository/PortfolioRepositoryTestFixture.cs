@@ -32,7 +32,9 @@ public class PortfolioRepositoryTestFixture
         return new Asset(
             AssetType.Stock,
             "Apple Inc.",
-            "AAPL"
+            "AAPL",
+            50,           
+            150.25m       
         );
     }
 

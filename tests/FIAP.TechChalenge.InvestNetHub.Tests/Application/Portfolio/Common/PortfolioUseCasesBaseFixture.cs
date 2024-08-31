@@ -13,10 +13,10 @@ public class PortfolioUseCasesBaseFixture
 
     public Mock<IUnitOfWork> GetUnitOfWorkMock() => new();
 
-    public DomainEntity.Portfolio GetValidPortfolio()
+    public DomainEntity.Portfolio GetValidPortfolio(Guid? id = null)
     {
         return new DomainEntity.Portfolio(
-            Guid.NewGuid(),
+            id ?? Guid.NewGuid(), 
             Faker.Company.CompanyName(),
             Faker.Lorem.Sentence()
         );

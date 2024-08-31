@@ -28,12 +28,14 @@ public class PortfolioRepositoryTest
     {
         FiapTechChalengeDbContext dbContext = _fixture.CreateDbContext();
         var examplePortfolio = _fixture.GetValidPortfolio();
+        var exampleAsset = _fixture.GetValidAsset();
+        examplePortfolio.AddAsset(exampleAsset); // Adicionando o ativo ao portfólio
         var portfolioRepository = new Repository.PortfolioRepository(dbContext);
 
         await portfolioRepository.Insert(examplePortfolio, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var dbPortfolio = await (_fixture.CreateDbContext(true))            
+        var dbPortfolio = await (_fixture.CreateDbContext(true))
             .Portfolios
             .Include(p => p.Assets)
             .Include(p => p.Transactions)
@@ -43,7 +45,15 @@ public class PortfolioRepositoryTest
         dbPortfolio!.Id.Should().Be(examplePortfolio.Id);
         dbPortfolio.Name.Should().Be(examplePortfolio.Name);
         dbPortfolio.Description.Should().Be(examplePortfolio.Description);
-    }
+
+        var dbAsset = dbPortfolio.Assets.FirstOrDefault();
+        dbAsset.Should().NotBeNull();
+        dbAsset!.Name.Should().Be(exampleAsset.Name);
+        dbAsset.Code.Should().Be(exampleAsset.Code);
+        dbAsset.Type.Should().Be(exampleAsset.Type);
+        dbAsset.Quantity.Should().Be(exampleAsset.Quantity);
+        dbAsset.Price.Should().Be(exampleAsset.Price);    }
+
 
     [Fact(DisplayName = "Get")]
     [Trait("Integration/Infra.Data", "PortfolioRepository - Repositories")]
