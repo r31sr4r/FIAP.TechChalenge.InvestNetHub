@@ -46,4 +46,16 @@ public class Asset : EntitySeedWork
         if (Price <= 0)
             throw new EntityValidationException($"{nameof(Price)} should be greater than 0");
     }
+
+    public void ApplyTransaction(Transaction transaction)
+    {
+        if (transaction.Type == TransactionType.Buy)
+        {
+            UpdateQuantity(Quantity + transaction.Quantity);
+        }
+        else if (transaction.Type == TransactionType.Sell)
+        {
+            UpdateQuantity(Quantity - transaction.Quantity);
+        }
+    }
 }
