@@ -27,6 +27,7 @@ public class AddAssetToPortfolioTestFixture : PortfolioUseCasesBaseFixture
     public Asset GetValidAsset()
     {
         return new Asset(
+            Guid.NewGuid(),
             AssetType.Stock,
             Faker.Company.CompanyName(),
             Faker.Random.AlphaNumeric(4).ToUpper(),

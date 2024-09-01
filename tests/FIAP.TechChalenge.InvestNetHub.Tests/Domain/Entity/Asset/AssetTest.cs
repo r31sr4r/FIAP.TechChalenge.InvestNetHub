@@ -13,6 +13,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         {
             var validData = new
             {
+                PortfolioId = Guid.NewGuid(),
                 Type = AssetType.Stock,
                 Name = "Apple Inc.",
                 Code = "AAPL",
@@ -21,6 +22,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
             };
 
             var asset = new DomainEntity.Asset(
+                validData.PortfolioId,
                 validData.Type, 
                 validData.Name, 
                 validData.Code, 
@@ -45,6 +47,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         public void InstantiateErrorWhenNameIsEmpty(string? name)
         {
             Action action = () => new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock, 
                 name!, 
                 "AAPL", 
@@ -65,6 +68,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         public void InstantiateErrorWhenCodeIsEmpty(string? code)
         {
             Action action = () => new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock, 
                 "Apple Inc.", 
                 code!, 
@@ -84,6 +88,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         public void InstantiateErrorWhenNameIsLessThan3Characters(string invalidName)
         {
             Action action = () => new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock, 
                 invalidName, 
                 "AAPL", 
@@ -102,7 +107,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         {
             var invalidName = new string('a', 256);
 
-            Action action = () => new DomainEntity.Asset(
+            Action action = () => new DomainEntity.Asset(Guid.NewGuid(),
                 AssetType.Stock, 
                 invalidName, 
                 "AAPL", 
@@ -122,6 +127,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         public void InstantiateErrorWhenQuantityIsInvalid(int quantity)
         {
             Action action = () => new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock, 
                 "Apple Inc.", 
                 "AAPL", 
@@ -141,6 +147,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Asset
         public void InstantiateErrorWhenPriceIsInvalid(decimal price)
         {
             Action action = () => new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock, 
                 "Apple Inc.", 
                 "AAPL", 

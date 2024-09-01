@@ -33,7 +33,7 @@ public class RemoveTransactionFromPortfolioTestFixture : PortfolioUseCasesBaseFi
 
     public Asset GetValidAsset()
     {
-        return new Asset(
+        return new Asset(Guid.NewGuid(),
             AssetType.Stock,
             Faker.Company.CompanyName(),
             Faker.Random.AlphaNumeric(4).ToUpper(),

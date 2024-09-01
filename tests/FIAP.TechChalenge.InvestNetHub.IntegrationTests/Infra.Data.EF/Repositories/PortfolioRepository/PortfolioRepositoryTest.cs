@@ -28,7 +28,7 @@ public class PortfolioRepositoryTest
     {
         FiapTechChalengeDbContext dbContext = _fixture.CreateDbContext();
         var examplePortfolio = _fixture.GetValidPortfolio();
-        var exampleAsset = _fixture.GetValidAsset();
+        var exampleAsset = _fixture.GetValidAsset(examplePortfolio.Id);
         examplePortfolio.AddAsset(exampleAsset); // Adicionando o ativo ao portfólio
         var portfolioRepository = new Repository.PortfolioRepository(dbContext);
 

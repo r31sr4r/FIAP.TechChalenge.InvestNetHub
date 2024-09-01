@@ -20,6 +20,7 @@ public class DeleteAssetFromPortfolioTestFixture : PortfolioUseCasesBaseFixture
 
     public DomainEntity.Asset GetValidAsset(Guid portfolioId)
     => new(
+        portfolioId,
         AssetType.Stock,
         GetValidName(),
         GetValidCode(),

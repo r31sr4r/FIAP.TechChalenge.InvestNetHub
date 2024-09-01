@@ -192,6 +192,7 @@ namespace FIAP.TechChalenge.InvestNetHub.UnitTests.Domain.Entity.Portfolio
         private DomainEntity.Asset CreateValidAsset()
         {
             return new DomainEntity.Asset(
+                Guid.NewGuid(),
                 AssetType.Stock,
                 "Apple Inc.",
                 "AAPL",

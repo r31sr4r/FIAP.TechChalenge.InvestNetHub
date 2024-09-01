@@ -27,9 +27,10 @@ public class PortfolioRepositoryTestFixture
         );
     }
 
-    public Asset GetValidAsset()
+    public Asset GetValidAsset(Guid portolioId)
     {
         return new Asset(
+            portolioId,
             AssetType.Stock,
             "Apple Inc.",
             "AAPL",
@@ -55,9 +56,9 @@ public class PortfolioRepositoryTestFixture
         return Enumerable.Range(1, length).Select(_ => GetValidPortfolio()).ToList();
     }
 
-    public List<Asset> GetExampleAssetList(int length = 10)
+    public List<Asset> GetExampleAssetList(Guid portfolioId, int length = 10)
     {
-        return Enumerable.Range(1, length).Select(_ => GetValidAsset()).ToList();
+        return Enumerable.Range(1, length).Select(_ => GetValidAsset(portfolioId)).ToList();
     }
 
     public List<Transaction> GetExampleTransactionList(Guid portfolioId, Guid assetId, int length = 10)
