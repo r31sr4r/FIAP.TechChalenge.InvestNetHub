@@ -33,7 +33,7 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Start containers
-      run: docker-compose -f "tests/FIAP.TechChalenge.InvestNetHub.E2ETests/docker-compose.yml" up -d --build
+      run: docker compose -f "tests/FIAP.TechChalenge.InvestNetHub.E2ETests/docker-compose.yml" up -d --build
         
     - name: Restore dependencies
       run: dotnet restore
