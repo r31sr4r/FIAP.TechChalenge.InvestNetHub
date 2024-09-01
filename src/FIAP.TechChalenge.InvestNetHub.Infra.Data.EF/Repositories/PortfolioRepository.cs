@@ -11,6 +11,8 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories
     {
         private readonly FiapTechChalengeDbContext _context;
         private DbSet<Portfolio> _portfolios => _context.Set<Portfolio>();
+        private DbSet<Asset> _assets => _context.Set<Asset>();
+        private DbSet<Transaction> _transactions => _context.Set<Transaction>();
 
         public PortfolioRepository(FiapTechChalengeDbContext context)
         {
@@ -89,7 +91,8 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories
 
             NotFoundException.ThrowIfNull(portfolio, $"Portfolio with id {portfolioId} not found");
 
-            portfolio!.AddAsset(asset);            
+            await _assets.AddAsync(asset, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
 
@@ -115,8 +118,7 @@ namespace FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Repositories
 
             NotFoundException.ThrowIfNull(portfolio, $"Portfolio with id {portfolioId} not found");
 
-            portfolio.AddTransaction(transaction);
-
+            await _transactions.AddAsync(transaction, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 

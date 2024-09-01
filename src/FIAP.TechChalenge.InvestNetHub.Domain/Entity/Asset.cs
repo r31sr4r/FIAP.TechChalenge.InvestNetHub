@@ -6,8 +6,9 @@ namespace FIAP.TechChalenge.InvestNetHub.Domain.Entity;
 
 public class Asset : EntitySeedWork
 {
-    public Asset(AssetType type, string name, string code, int quantity, decimal price)
+    public Asset(Guid portfolioId, AssetType type, string name, string code, int quantity, decimal price)
     {
+        PortfolioId = portfolioId;
         Type = type;
         Name = name;
         Code = code;
@@ -17,6 +18,7 @@ public class Asset : EntitySeedWork
         Validate();
     }
 
+    public Guid PortfolioId { get; private set; } 
     public AssetType Type { get; private set; }
     public string Name { get; private set; }
     public string Code { get; private set; }
@@ -33,6 +35,8 @@ public class Asset : EntitySeedWork
 
     private void Validate()
     {
+        if (PortfolioId == Guid.Empty)
+            throw new EntityValidationException($"{nameof(PortfolioId)} should not be empty");
         if (string.IsNullOrWhiteSpace(Name))
             throw new EntityValidationException($"{nameof(Name)} should not be empty or null");
         if (Name.Length <= 3)

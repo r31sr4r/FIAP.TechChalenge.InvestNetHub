@@ -15,6 +15,9 @@ using MediatR;
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Response;
 using FIAP.TechChalenge.InvestNetHub.Api.Extensions;
 using FIAP.TechChalenge.InvestNetHub.Api.ApiModels.Portfolio;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.Portfolio.AddAssetToPortfolio;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.Portfolio.AddTransactionToPortfolio;
+using FIAP.TechChalenge.InvestNetHub.Application.UseCases.Portfolio.RemoveTransactionFromPortfolio;
 
 namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
 {
@@ -161,6 +164,86 @@ namespace FIAP.TechChalenge.InvestNetHub.Api.Controllers
             var output = await _mediator.Send(input, cancellation);
 
             return Ok(new ApiResponseList<PortfolioModelOutput>(output));
+        }
+
+      [HttpPost("{portfolioId:guid}/assets")]
+        [ProducesResponseType(typeof(ApiResponse<AssetModelOutput>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> AddAsset(
+            [FromRoute] Guid portfolioId,
+            [FromBody] AddAssetToPortfolioApiInput apiInput,
+            CancellationToken cancellationToken)
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            var input = new AddAssetToPortfolioInput(
+                portfolioId,
+                apiInput.Name,
+                apiInput.Code,
+                apiInput.Type,
+                apiInput.Quantity,
+                apiInput.Price
+            );
+
+            var result = await _mediator.Send(input, cancellationToken);
+
+            return CreatedAtAction(
+                nameof(AddAsset),
+                new { portfolioId, result.Id },
+                new ApiResponse<AssetModelOutput>(result)
+            );
+        }
+      
+        [HttpPost("{portfolioId:guid}/transactions")]
+        [ProducesResponseType(typeof(ApiResponse<TransactionModelOutput>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> AddTransaction(
+            [FromRoute] Guid portfolioId,
+            [FromBody] AddTransactionToPortfolioApiInput apiInput,
+            CancellationToken cancellationToken)
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            var input = new AddTransactionToPortfolioInput(
+                portfolioId,
+                apiInput.AssetId,
+                apiInput.Type,
+                apiInput.Quantity,
+                apiInput.Price,
+                DateTime.Now
+            );
+
+            var result = await _mediator.Send(input, cancellationToken);
+
+            return CreatedAtAction(
+                nameof(AddTransaction),
+                new { portfolioId, result.Id },
+                new ApiResponse<TransactionModelOutput>(result)
+            );
+        }
+
+        [HttpDelete("{portfolioId:guid}/transactions/{transactionId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RemoveTransaction(
+            [FromRoute] Guid portfolioId,
+            [FromRoute] Guid transactionId,
+            CancellationToken cancellationToken)
+        {
+            var input = new RemoveTransactionFromPortfolioInput(portfolioId, transactionId);
+            await _mediator.Send(input, cancellationToken);
+
+            return NoContent();
         }
     }
 }

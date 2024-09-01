@@ -35,6 +35,7 @@ public class AddAssetToPortfolio : IAddAssetToPortfolio
         }        
 
         var asset = new Asset(
+            request.PortfolioId,
             assetType,
             request.Name,
             request.Code,

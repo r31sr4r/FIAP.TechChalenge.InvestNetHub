@@ -3,6 +3,7 @@ using System;
 using FIAP.TechChalenge.InvestNetHub.Infra.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIAP.TechChalenge.InvestNetHub.Infra.Data.EF.Migrations
 {
     [DbContext(typeof(FiapTechChalengeDbContext))]
-    partial class FiapTechChalengeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240901122944_UpdateAssetTable")]
+    partial class UpdateAssetTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
